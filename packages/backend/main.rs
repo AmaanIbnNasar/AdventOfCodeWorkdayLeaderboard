@@ -1,5 +1,9 @@
-use backend::models::AOCResponse;
+#![feature(file_create_new)]
+
+pub mod models;
+
 use lambda_http::{run, service_fn, Body, Error, Response};
+use models::AOCResponse;
 use reqwest::{Client, Url};
 use std::env;
 
