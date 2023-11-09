@@ -3,10 +3,10 @@ use std::collections::HashMap;
 use serde::Deserialize;
 
 #[derive(Debug, Deserialize, PartialEq)]
-pub struct Response {
-    event: String,
-    owner_id: isize,
-    members: Members
+pub struct AOCResponse {
+    pub event: String,
+    pub owner_id: isize,
+    pub members: Members
 }
 
 pub type Members = HashMap<String, Member>;

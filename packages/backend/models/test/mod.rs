@@ -4,7 +4,7 @@ use std::io::BufReader;
 
 use crate::models::{Member, Completion, CompletionDayLevel, Day, Members};
 
-use super::Response;
+use super::AOCResponse;
 
 #[test]
 fn test_response_deserialisation() {
@@ -12,7 +12,7 @@ fn test_response_deserialisation() {
         File::open("packages/backend/models/test/test_response.json").expect("Unable to open file");
     let reader = BufReader::new(file);
 
-    let u: Result<Response, serde_json::Error> = serde_json::from_reader(reader);
+    let u: Result<AOCResponse, serde_json::Error> = serde_json::from_reader(reader);
 
     if u.is_err(){
         println!("{u:?}");
@@ -82,7 +82,7 @@ fn test_response_deserialisation() {
     let mut expected_members: Members = HashMap::new();
     expected_members.insert("2388937".to_string(), member_2388937);
     expected_members.insert("2380866".to_string(), member_2380866);
-    let expected_response = Response{
+    let expected_response = AOCResponse{
         event: "2022".to_string(),
         owner_id: 1599442,
         members: expected_members,

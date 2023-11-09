@@ -1,25 +1,35 @@
-use lambda_http::{run, service_fn, Body, Error, Request, RequestExt, Response};
+use backend::models::AOCResponse;
+use lambda_http::{run, service_fn, Body, Error, Response};
+use reqwest::{Client, Url};
+use std::env;
 
-/// This is the main body for the function.
-/// Write your code inside it.
-/// There are some code example in the following URLs:
-/// - https://github.com/awslabs/aws-lambda-rust-runtime/tree/main/examples
-async fn function_handler(event: Request) -> Result<Response<Body>, Error> {
-    // Extract some useful information from the request
-    let who = event
-        .query_string_parameters_ref()
-        .and_then(|params| params.first("name"))
-        .unwrap_or("world");
-    let message = format!("Hello {who}, this is an AWS Lambda HTTP request");
+async fn function_handler(_: lambda_http::Request) -> Result<Response<Body>, Error> {
+    let leaderboard = get_aoc_leaderboard().await?;
 
-    // Return something that implements IntoResponse.
-    // It will be serialized to the right response event automatically by the runtime
+    let year = leaderboard.event;
+
+    let message = format!("Fetched leaderboard for Advent of Code {year}");
     let resp = Response::builder()
         .status(200)
         .header("content-type", "text/html")
         .body(message.into())
         .map_err(Box::new)?;
     Ok(resp)
+}
+
+async fn get_aoc_leaderboard() -> Result<AOCResponse, Error> {
+    let cookie = env::var("AOC_COOKIE").expect("AOC_COOKIE environment variable not set");
+    let leaderboard =
+        env::var("AOC_LEADERBOARD").expect("AOC_LEADERBOARD environment variable not set");
+    let url = format!("https://adventofcode.com/2022/leaderboard/private/view/{leaderboard}.json");
+    let client = Client::new();
+    let request = client
+        .get(Url::parse(&url).unwrap())
+        .header("Content-Type", "application/json;charset=utf-8")
+        .header("Cookie", cookie);
+    let response_body = request.send().await?.text().await?;
+    let response = serde_json::from_str::<AOCResponse>(&response_body)?;
+    Ok(response)
 }
 
 #[tokio::main]
