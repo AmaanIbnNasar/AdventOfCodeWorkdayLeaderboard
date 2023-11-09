@@ -29,8 +29,8 @@ resource "aws_lambda_function" "backend_lambda" {
 
   environment {
     variables = {
-      AOC_COOKIE      = data.external.env.result["AOC_COOKIE"]
-      AOC_LEADERBOARD = data.external.env.result["AOC_LEADERBOARD"]
+      AOC_COOKIE      = var.AOC_COOKIE
+      AOC_LEADERBOARD = var.AOC_LEADERBOARD
     }
   }
 }
