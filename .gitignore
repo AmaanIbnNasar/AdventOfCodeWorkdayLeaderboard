@@ -17,7 +17,7 @@ Cargo.lock
 package.zip
 
 # Local .terraform directories
-**/.terraform/*
+**/.terraform
 
 # .tfstate files
 *.tfstate
