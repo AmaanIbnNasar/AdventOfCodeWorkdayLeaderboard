@@ -1,22 +1,3 @@
-# Advent of Code Leaderboard
-
-## Goals
-
-- Leaderboard that accounts for limited time during the work day
-- (Optionally) Ignores weekends
-
-## Scoring Ideas
-
-- Number of stars
-	- 1 point on the day, 1/2 point if late
-    - Concurrency bonus?
-- Sandbox benchmarking
-
-## API
-
-`https://adventofcode.com/2022/leaderboard/private/view/1599442.json` returns results data
-
-```json
 {
     "members": {
         "2388937": {
@@ -69,31 +50,3 @@
     "owner_id": 1599442,
     "event": "2022"
 }
-```
-
-### Response
-
-```rust
-struct Response {
-	event: String,
-	owner_id: Number,
-	members: Dict<Member> // Indexed by member id
-}
-
-struct Member {
-	global_score: Number,
-	stars: Number,
-	id: Number,
-	name: String,
-	local_score: Number,
-	last_star_ts: Number,
-	completion_day_level: Dict<Day> // Indexed by day
-}
-
-type Day = Dict<Completion> // 1 and/or 2
-
-struct Completion {
-	star_index = Number,
-	get_star_ts = Number
-}
-```
