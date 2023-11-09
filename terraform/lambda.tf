@@ -34,3 +34,8 @@ resource "aws_lambda_function" "backend_lambda" {
     }
   }
 }
+
+resource "aws_lambda_function_url" "backend_invoke_url" {
+  function_name      = aws_lambda_function.backend_lambda.function_name
+  authorization_type = "NONE"
+}
