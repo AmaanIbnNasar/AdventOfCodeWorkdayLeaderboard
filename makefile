@@ -20,3 +20,17 @@ release-backend:
 
 clean:
 	rm -r target
+
+terraform-init: terraform-clean
+	cd terraform && terraform init -backend-config=main.conf
+	cd terraform && terraform workspace new main || terraform workspace select main
+	cd terraform && terraform init
+
+terraform-clean:
+	cd terraform && rm -rf .terraform 
+
+terraform-plan: terraform-init
+	cd terraform && terraform plan
+
+terraform-apply: terraform-init
+	cd terraform && terraform apply -auto-approve
