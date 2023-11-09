@@ -17,12 +17,12 @@ resource "aws_iam_role" "iam_for_lambda" {
 }
 
 resource "aws_lambda_function" "backend_lambda" {
-  filename      = "package.zip"
+  filename      = "../package.zip"
   function_name = "advent_of_code_leaderboard_backend_lambda"
   role          = aws_iam_role.iam_for_lambda.arn
   handler       = "bootstrap.main"
 
-  source_code_hash = filebase64sha256("package.zip")
+  source_code_hash = filebase64sha256("../package.zip")
 
   architectures = ["arm64"]
   runtime       = "provided.al2"
