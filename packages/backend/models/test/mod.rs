@@ -2,7 +2,7 @@ use std::{fs::File, collections::HashMap};
 use std::io::BufReader;
 
 
-use crate::models::{Member, Completion, CompletionDayLevel, Day, Members};
+use crate::models::{Member, Completion, CompletionDayLevel, Day, ResponseMembers};
 
 use super::AOCResponse;
 
@@ -79,7 +79,7 @@ fn test_response_deserialisation() {
         completion_day_level: member_2380866_cdl,
     };
 
-    let mut expected_members: Members = HashMap::new();
+    let mut expected_members: ResponseMembers = HashMap::new();
     expected_members.insert("2388937".to_string(), member_2388937);
     expected_members.insert("2380866".to_string(), member_2380866);
     let expected_response = AOCResponse{

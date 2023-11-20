@@ -20,6 +20,7 @@ release-backend:
 
 clean:
 	rm -r target
+	rm package.zip
 
 terraform-init: terraform-clean
 	cd terraform && terraform init -backend-config=main.conf
