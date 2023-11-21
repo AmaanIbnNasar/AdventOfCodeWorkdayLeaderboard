@@ -2,7 +2,7 @@ use std::{fs::File, collections::HashMap};
 use std::io::BufReader;
 
 
-use crate::models::{Member, Completion, CompletionDayLevel, Day, ResponseMembers};
+use crate::models::{Member, TaskCompletion, DaysCompleted, Day, ResponseMembers};
 
 use super::AOCResponse;
 
@@ -21,11 +21,11 @@ fn test_response_deserialisation() {
 
     let response = u.unwrap();
 
-    let member_2388937_day_1_1 = Completion{
+    let member_2388937_day_1_1 = TaskCompletion{
         star_index: 89302,
         get_star_ts: 1669911189,
     };
-    let member_2388937_day_1_2 = Completion{
+    let member_2388937_day_1_2 = TaskCompletion{
         star_index: 90973,
         get_star_ts: 1669911672,
     };
@@ -33,7 +33,7 @@ fn test_response_deserialisation() {
     member_2388937_day_1.insert("1".to_string(), member_2388937_day_1_1);
     member_2388937_day_1.insert("2".to_string(), member_2388937_day_1_2);
 
-    let mut member_2388937_cdl: CompletionDayLevel = HashMap::new();
+    let mut member_2388937_cdl: DaysCompleted = HashMap::new();
     member_2388937_cdl.insert("1".to_string(), member_2388937_day_1);
 
     let member_2388937 = Member{
@@ -46,15 +46,15 @@ fn test_response_deserialisation() {
         completion_day_level: member_2388937_cdl,
     };
 
-    let member_2380866_day_3_1 = Completion{
+    let member_2380866_day_3_1 = TaskCompletion{
         star_index: 602743,
         get_star_ts: 1670064301,
     };
-    let member_2380866_day_3_2 = Completion{
+    let member_2380866_day_3_2 = TaskCompletion{
         star_index: 608140,
         get_star_ts: 1670065607,
     };
-    let member_2380866_day_16_1 = Completion{
+    let member_2380866_day_16_1 = TaskCompletion{
         star_index: 3135956,
         get_star_ts: 1671190701,
     };
@@ -65,7 +65,7 @@ fn test_response_deserialisation() {
     let mut member_2380866_day_16: Day = HashMap::new();
     member_2380866_day_16.insert("1".to_string(), member_2380866_day_16_1);
 
-    let mut member_2380866_cdl: CompletionDayLevel = HashMap::new();
+    let mut member_2380866_cdl: DaysCompleted = HashMap::new();
     member_2380866_cdl.insert("3".to_string(), member_2380866_day_3);
     member_2380866_cdl.insert("16".to_string(), member_2380866_day_16);
 
