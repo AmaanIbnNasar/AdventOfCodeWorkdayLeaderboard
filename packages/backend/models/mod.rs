@@ -9,25 +9,31 @@ pub struct AOCResponse {
     pub members: ResponseMembers
 }
 
-pub type ResponseMembers = HashMap<String, Member>;
+pub type MemberId = String;
+
+pub type ResponseMembers = HashMap<MemberId, AOCMember>;
 
 #[derive(Debug, Deserialize, PartialEq)]
-pub struct Member {
+pub struct AOCMember {
     pub global_score: isize,
 	pub stars: isize,
 	pub id: isize,
 	pub name: String,
 	pub local_score: isize,
 	pub last_star_ts: isize,
-	pub completion_day_level: CompletionDayLevel
+	pub completion_day_level: DaysCompleted
 }
 
-pub type CompletionDayLevel = HashMap<String, Day>;
+pub type DayId = String;
 
-pub type Day = HashMap<String, Completion>;
+pub type DaysCompleted = HashMap<DayId, Day>;
+
+pub type TaskStatus = String;
+
+pub type Day = HashMap<TaskStatus, TaskCompletion>;
 
 #[derive(Debug, Deserialize, PartialEq)]
-pub struct Completion {
+pub struct TaskCompletion {
     pub star_index: isize,
     pub get_star_ts: isize,
 }
