@@ -2,7 +2,7 @@ use std::{fs::File, collections::HashMap};
 use std::io::BufReader;
 
 
-use crate::models::{Member, TaskCompletion, DaysCompleted, Day, ResponseMembers};
+use crate::models::{AOCMember, TaskCompletion, DaysCompleted, Day, ResponseMembers};
 
 use super::AOCResponse;
 
@@ -36,7 +36,7 @@ fn test_response_deserialisation() {
     let mut member_2388937_cdl: DaysCompleted = HashMap::new();
     member_2388937_cdl.insert("1".to_string(), member_2388937_day_1);
 
-    let member_2388937 = Member{
+    let member_2388937 = AOCMember{
         global_score: 0,
         stars: 4,
         id: 2388937,
@@ -69,7 +69,7 @@ fn test_response_deserialisation() {
     member_2380866_cdl.insert("3".to_string(), member_2380866_day_3);
     member_2380866_cdl.insert("16".to_string(), member_2380866_day_16);
 
-    let member_2380866 = Member{
+    let member_2380866 = AOCMember{
         global_score: 0,
         stars: 33,
         id: 2380866,

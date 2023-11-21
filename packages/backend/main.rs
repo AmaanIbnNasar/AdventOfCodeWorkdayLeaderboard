@@ -2,7 +2,7 @@ pub mod models;
 
 use chrono::{DateTime, Datelike, Utc};
 use lambda_http::{run, service_fn, Body, Error, Response};
-use models::{AOCResponse, TaskCompletion};
+use models::{AOCResponse, TaskCompletion, AOCMember};
 use reqwest::{Client, Url};
 use serde::Serialize;
 use std::{collections::HashMap, env};
@@ -11,36 +11,14 @@ async fn function_handler(_: lambda_http::Request) -> Result<Response<Body>, Err
     let leaderboard = get_aoc_leaderboard().await?;
 
     let year = leaderboard.event.parse::<i32>().unwrap();
-
     let response_members = leaderboard.members;
     let owner_id = leaderboard.owner_id;
 
-    let mut members: Vec<Member> = Vec::with_capacity(response_members.len());
-    for (id, member) in response_members.into_iter() {
-        let mut day_statuses: Vec<DayStatus> = Vec::with_capacity(25);
-        let points: usize = 0;
+    let members: Vec<Member> = response_members
+        .into_iter()
+        .map(|(id, member)| parse_member(member, year, id, owner_id))
+        .collect();
 
-        member
-            .completion_day_level
-            .iter()
-            .map(|(day, day_status)| (day.parse::<u32>().unwrap(), day_status))
-            .for_each(|(day, tasks)| {
-                day_statuses[day as usize - 1] = get_day_status(day, year, tasks);
-            });
-
-        let is_owner = match id == owner_id.to_string() {
-            true => Some(true),
-            false => None,
-        };
-
-        members.push(Member {
-            name: member.name,
-            stars: member.stars,
-            day_statuses,
-            is_owner,
-            points,
-        });
-    }
     let members_string = serde_json::to_string(&members).unwrap();
     let message =
         format!("Fetched leaderboard for Advent of Code {year}. Members:\n{members_string:?}");
@@ -50,6 +28,29 @@ async fn function_handler(_: lambda_http::Request) -> Result<Response<Body>, Err
         .body(message.into())
         .map_err(Box::new)?;
     Ok(resp)
+}
+
+fn parse_member(member: AOCMember, year: i32, id: String, owner_id: isize) -> Member {
+    let mut day_statuses: Vec<DayStatus> = Vec::with_capacity(25);
+    let points: usize = 0;
+    member
+        .completion_day_level
+        .iter()
+        .map(|(day, day_status)| (day.parse::<u32>().unwrap(), day_status))
+        .for_each(|(day, tasks)| {
+            day_statuses[day as usize - 1] = get_day_status(day, year, tasks);
+        });
+    let is_owner = match id == owner_id.to_string() {
+        true => Some(true),
+        false => None,
+    };
+    Member {
+        name: member.name,
+        stars: member.stars,
+        day_statuses,
+        is_owner,
+        points,
+    }
 }
 
 fn get_day_status(day: u32, year: i32, tasks: &HashMap<String, TaskCompletion>) -> DayStatus {

@@ -11,10 +11,10 @@ pub struct AOCResponse {
 
 pub type MemberId = String;
 
-pub type ResponseMembers = HashMap<MemberId, Member>;
+pub type ResponseMembers = HashMap<MemberId, AOCMember>;
 
 #[derive(Debug, Deserialize, PartialEq)]
-pub struct Member {
+pub struct AOCMember {
     pub global_score: isize,
 	pub stars: isize,
 	pub id: isize,
