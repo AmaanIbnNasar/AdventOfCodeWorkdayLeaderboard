@@ -1,0 +1,220 @@
+{
+    "message": "Fetched leaderboard for Advent of Code 2022 with 2 participants.",
+    "members": [
+        {
+            "name": "AmaanIbnNasar",
+            "stars": 35,
+            "day_statuses": [
+                {
+                    "task_1": "OnTime",
+                    "task_2": "OnTime"
+                },
+                {
+                    "task_1": "OnTime",
+                    "task_2": "OnTime"
+                },
+                {
+                    "task_1": "OnTime",
+                    "task_2": "OnTime"
+                },
+                {
+                    "task_1": "OnTime",
+                    "task_2": "OnTime"
+                },
+                {
+                    "task_1": "OnTime",
+                    "task_2": "OnTime"
+                },
+                {
+                    "task_1": "OnTime",
+                    "task_2": "OnTime"
+                },
+                {
+                    "task_1": "OnTime",
+                    "task_2": "OnTime"
+                },
+                {
+                    "task_1": "OnTime",
+                    "task_2": "OnTime"
+                },
+                {
+                    "task_1": "OnTime",
+                    "task_2": "OnTime"
+                },
+                {
+                    "task_1": "OnTime",
+                    "task_2": "Late"
+                },
+                {
+                    "task_1": "OnTime",
+                    "task_2": "Late"
+                },
+                {
+                    "task_1": "OnTime",
+                    "task_2": "OnTime"
+                },
+                {
+                    "task_1": "OnTime",
+                    "task_2": "OnTime"
+                },
+                {
+                    "task_1": "OnTime",
+                    "task_2": "OnTime"
+                },
+                {
+                    "task_1": "OnTime",
+                    "task_2": "OnTime"
+                },
+                {
+                    "task_1": "Incomplete",
+                    "task_2": "Incomplete"
+                },
+                {
+                    "task_1": "Late",
+                    "task_2": "Incomplete"
+                },
+                {
+                    "task_1": "Late",
+                    "task_2": "Incomplete"
+                },
+                {
+                    "task_1": "Incomplete",
+                    "task_2": "Incomplete"
+                },
+                {
+                    "task_1": "Late",
+                    "task_2": "Incomplete"
+                },
+                {
+                    "task_1": "OnTime",
+                    "task_2": "OnTime"
+                },
+                {
+                    "task_1": "Incomplete",
+                    "task_2": "Incomplete"
+                },
+                {
+                    "task_1": "Incomplete",
+                    "task_2": "Incomplete"
+                },
+                {
+                    "task_1": "Incomplete",
+                    "task_2": "Incomplete"
+                },
+                {
+                    "task_1": "Incomplete",
+                    "task_2": "Incomplete"
+                }
+            ],
+            "is_owner": true,
+            "points": 65
+        },
+        {
+            "name": "JackSpagnoli",
+            "stars": 33,
+            "day_statuses": [
+                {
+                    "task_1": "OnTime",
+                    "task_2": "OnTime"
+                },
+                {
+                    "task_1": "OnTime",
+                    "task_2": "OnTime"
+                },
+                {
+                    "task_1": "OnTime",
+                    "task_2": "OnTime"
+                },
+                {
+                    "task_1": "OnTime",
+                    "task_2": "OnTime"
+                },
+                {
+                    "task_1": "OnTime",
+                    "task_2": "OnTime"
+                },
+                {
+                    "task_1": "OnTime",
+                    "task_2": "OnTime"
+                },
+                {
+                    "task_1": "OnTime",
+                    "task_2": "OnTime"
+                },
+                {
+                    "task_1": "OnTime",
+                    "task_2": "OnTime"
+                },
+                {
+                    "task_1": "OnTime",
+                    "task_2": "OnTime"
+                },
+                {
+                    "task_1": "OnTime",
+                    "task_2": "OnTime"
+                },
+                {
+                    "task_1": "Late",
+                    "task_2": "Late"
+                },
+                {
+                    "task_1": "OnTime",
+                    "task_2": "OnTime"
+                },
+                {
+                    "task_1": "OnTime",
+                    "task_2": "OnTime"
+                },
+                {
+                    "task_1": "OnTime",
+                    "task_2": "OnTime"
+                },
+                {
+                    "task_1": "OnTime",
+                    "task_2": "OnTime"
+                },
+                {
+                    "task_1": "OnTime",
+                    "task_2": "Incomplete"
+                },
+                {
+                    "task_1": "Incomplete",
+                    "task_2": "Incomplete"
+                },
+                {
+                    "task_1": "Late",
+                    "task_2": "Late"
+                },
+                {
+                    "task_1": "Incomplete",
+                    "task_2": "Incomplete"
+                },
+                {
+                    "task_1": "Incomplete",
+                    "task_2": "Incomplete"
+                },
+                {
+                    "task_1": "Incomplete",
+                    "task_2": "Incomplete"
+                },
+                {
+                    "task_1": "Incomplete",
+                    "task_2": "Incomplete"
+                },
+                {
+                    "task_1": "Incomplete",
+                    "task_2": "Incomplete"
+                },
+                {
+                    "task_1": "Incomplete",
+                    "task_2": "Incomplete"
+                },
+                {
+                    "task_1": "Incomplete",
+                    "task_2": "Incomplete"
+                }
+            ],
+            "points": 62
+        }
+    ]
+}
