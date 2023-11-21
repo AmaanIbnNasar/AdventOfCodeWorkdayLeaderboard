@@ -7,6 +7,12 @@ use reqwest::{Client, Url};
 use serde::Serialize;
 use std::{collections::HashMap, env};
 
+#[derive(Debug, Serialize)]
+struct LambdaResponse {
+    message: String,
+    members: Vec<Member>,
+}
+
 async fn function_handler(_: lambda_http::Request) -> Result<Response<Body>, Error> {
     let leaderboard = get_aoc_leaderboard().await?;
 
@@ -19,20 +25,24 @@ async fn function_handler(_: lambda_http::Request) -> Result<Response<Body>, Err
         .map(|(id, member)| parse_member(member, year, id, owner_id))
         .collect();
 
-    let members_string = serde_json::to_string(&members).unwrap();
-    let message =
-        format!("Fetched leaderboard for Advent of Code {year}. Members:\n{members_string:?}");
+
+    let num_members = members.len();
+
+    let response = LambdaResponse {
+        message: format!("Fetched leaderboard for Advent of Code {year} with {num_members} participants."),
+        members,
+    };
+    let response_string = serde_json::to_string(&response).unwrap();
     let resp = Response::builder()
         .status(200)
-        .header("content-type", "text/html")
-        .body(message.into())
+        .header("content-type", "application/json")
+        .body(response_string.into())
         .map_err(Box::new)?;
     Ok(resp)
 }
 
 fn parse_member(member: AOCMember, year: i32, id: String, owner_id: isize) -> Member {
-    let mut day_statuses: Vec<DayStatus> = Vec::with_capacity(25);
-    let points: usize = 0;
+    let mut day_statuses: Vec<DayStatus> = [DayStatus::default(); 25].to_vec();
     member
         .completion_day_level
         .iter()
@@ -44,6 +54,7 @@ fn parse_member(member: AOCMember, year: i32, id: String, owner_id: isize) -> Me
         true => Some(true),
         false => None,
     };
+    let points = calculate_points(&day_statuses);
     Member {
         name: member.name,
         stars: member.stars,
@@ -51,6 +62,25 @@ fn parse_member(member: AOCMember, year: i32, id: String, owner_id: isize) -> Me
         is_owner,
         points,
     }
+}
+
+fn calculate_points(day_statuses: &[DayStatus]) -> usize {
+    day_statuses
+        .iter()
+        .map(|day_status| {
+            let task_1_points = match day_status.task_1 {
+                TaskStatus::OnTime => 2,
+                TaskStatus::Late => 1,
+                TaskStatus::Incomplete => 0,
+            };
+            let task_2_points = match day_status.task_2 {
+                TaskStatus::OnTime => 2,
+                TaskStatus::Late => 1,
+                TaskStatus::Incomplete => 0,
+            };
+            task_1_points + task_2_points
+        })
+        .sum()
 }
 
 fn get_day_status(day: u32, year: i32, tasks: &HashMap<String, TaskCompletion>) -> DayStatus {
@@ -111,17 +141,24 @@ struct Member {
     name: String,
     stars: isize,
     day_statuses: Vec<DayStatus>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     is_owner: Option<bool>,
     points: usize,
 }
 
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, Clone, Copy)]
 struct DayStatus {
     task_1: TaskStatus,
     task_2: TaskStatus,
 }
 
-#[derive(Debug, Serialize)]
+impl Default for DayStatus {
+    fn default() -> Self {
+        Self { task_1: TaskStatus::Incomplete, task_2: TaskStatus::Incomplete }
+    }
+}
+
+#[derive(Debug, Serialize, Clone, Copy)]
 enum TaskStatus {
     OnTime,
     Late,
