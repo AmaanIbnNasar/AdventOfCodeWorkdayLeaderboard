@@ -14,9 +14,11 @@ watch-backend:
 
 release-backend:
 	cargo lambda build --compiler cross --release --target aarch64-unknown-linux-musl
-	cp target/lambda/backend/bootstrap ./
-	zip package.zip bootstrap
-	rm bootstrap
+	mkdir package
+	cp target/lambda/backend/bootstrap ./package/bootstrap
+	cp data/AOC_response.json ./package/AOC_response.json
+	zip -j package.zip package/*
+	rm -r package
 
 clean:
 	rm -r target
