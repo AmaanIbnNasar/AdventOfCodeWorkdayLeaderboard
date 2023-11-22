@@ -1,0 +1,59 @@
+@import "nhsuk-frontend/packages/nhsuk.scss";
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+.nhsuk-alert {
+  @include nhsuk-responsive-margin(2, "top");
+  @include nhsuk-responsive-margin(4, "bottom");
+  @include nhsuk-responsive-padding(3);
+  @include nhsuk-typography-responsive(19);
+
+  background-color: $color_nhsuk-grey-4;
+  border-left: 5px solid $color_nhsuk-grey-2;
+  opacity: 1;
+  animation: fadeIn 300ms ease-in-out forwards;
+  outline: none;
+
+  @media (prefers-reduced-motion) {
+    animation: none;
+  }
+
+  p {
+    margin-bottom: 0;
+  }
+
+  &--success {
+    border-left-color: $color_nhsuk-green;
+    background-color: tint($color_nhsuk-green, 75);
+  }
+
+  &--info {
+    border-left-color: $color_nhsuk-blue;
+    background-color: tint($color_nhsuk-blue, 75);
+  }
+
+  &--fade {
+    animation: fadeOut 150ms ease-in-out forwards;
+
+    @media (prefers-reduced-motion) {
+      animation: none;
+      visibility: hidden;
+    }
+  }
+}
