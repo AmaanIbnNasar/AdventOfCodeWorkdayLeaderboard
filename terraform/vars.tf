@@ -4,3 +4,6 @@ variable "AOC_COOKIE" {
 variable "AOC_LEADERBOARD" {
   type        = string
 }
+variable "AOC_YEAR" {
+  type        = string
+}
