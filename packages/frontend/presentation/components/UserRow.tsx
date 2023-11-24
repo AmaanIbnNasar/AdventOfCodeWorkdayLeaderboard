@@ -20,7 +20,10 @@ type UserRowProps = {
   user: User;
 };
 
-const COMPLETED_STATUSES = ["OnTime", "Late"];
+export const ON_TIME_STAR_COLOUR = "orange";
+// const LATE_STAR_COLOUR = "#16a6ce";
+export const LATE_STAR_COLOUR = "#8C8CBC";
+export const INCOMPLETE_STAR_COLOUR = "grey";
 
 const createStar = (task_1: TaskStatus, task_2: TaskStatus) => {
   if (task_1 == "OnTime" && task_2 == "OnTime") {
@@ -28,7 +31,7 @@ const createStar = (task_1: TaskStatus, task_2: TaskStatus) => {
       <FontAwesomeIcon
         icon={faStar}
         style={{
-          color: "orange",
+          color: ON_TIME_STAR_COLOUR,
         }}
       />
     );
@@ -42,29 +45,28 @@ const createStar = (task_1: TaskStatus, task_2: TaskStatus) => {
       <FontAwesomeIcon
         icon={faStar}
         style={{
-          color: "green",
+          color: LATE_STAR_COLOUR,
         }}
       />
     );
   }
-  if (COMPLETED_STATUSES.includes(task_1) && task_2 == "Incomplete") {
+  if (task_1 == "OnTime" && task_2 == "Incomplete") {
     return (
       <FontAwesomeIcon
         icon={faStarHalfAlt}
         style={{
-          color: "orange",
+          color: ON_TIME_STAR_COLOUR,
         }}
       />
     );
   }
-  if (task_1 == "Incomplete" && COMPLETED_STATUSES.includes(task_2)) {
+  if (task_1 == "Late" && task_2 == "Incomplete") {
     return (
       <FontAwesomeIcon
         icon={faStarHalfAlt}
         style={{
-          color: "orange",
+          color: LATE_STAR_COLOUR,
         }}
-        flip="horizontal"
       />
     );
   }
@@ -73,7 +75,7 @@ const createStar = (task_1: TaskStatus, task_2: TaskStatus) => {
       <FontAwesomeIcon
         icon={faStar}
         style={{
-          color: "grey",
+          color: INCOMPLETE_STAR_COLOUR,
         }}
       />
     );
@@ -84,6 +86,7 @@ const UserRow: React.FC<UserRowProps> = ({ user }) => {
   return (
     <Table.Row>
       <Table.Cell>{user.name}</Table.Cell>
+      <Table.Cell>{user.points}</Table.Cell>
       {user.day_statuses.map((day_statuses) => (
         <Table.Cell key={user.name}>
           {createStar(day_statuses.task_1, day_statuses.task_2)}

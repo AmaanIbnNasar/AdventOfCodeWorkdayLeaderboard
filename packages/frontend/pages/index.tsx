@@ -1,38 +1,49 @@
-import UserRow, { User } from "@/presentation/components/UserRow";
+import Leaderboard, {
+  LeaderboardProps,
+} from "@/presentation/components/Leaderboard";
+import {
+  INCOMPLETE_STAR_COLOUR,
+  LATE_STAR_COLOUR,
+  ON_TIME_STAR_COLOUR,
+  User,
+} from "@/presentation/components/UserRow";
 import BasePage from "@/presentation/wrappers/BasePage";
 import { GetServerSideProps, NextPage } from "next";
-import { Label, Table } from "nhsuk-react-components";
+import { Label } from "nhsuk-react-components";
 
-interface HomeProps {
-  users: User[];
-}
-
-const Home: NextPage<HomeProps> = ({ users }) => {
+const Home: NextPage<LeaderboardProps> = ({ users }) => {
   return (
     <BasePage>
       <Label isPageHeading>Leaderboard</Label>
-      <Table style={{ width: 500 }} responsive>
-        <Table.Head>
-          <Table.Row>
-            <Table.Cell>Username</Table.Cell>
-            {Array.from({ length: 25 }, (_, index) => (
-              <Table.Cell key={index + 1}>{`${index + 1}`}</Table.Cell>
-            ))}
-          </Table.Row>
-        </Table.Head>
-        <Table.Body>
-          {users
-            .sort((a, b) => b.points - a.points)
-            .map((user) => (
-              <UserRow key={user.name} user={user} />
-            ))}
-        </Table.Body>
-      </Table>
+      <div>
+        <p style={{ marginBottom: "5px" }}>Points are calculated as follows:</p>
+        <p
+          style={{
+            marginBottom: "5px",
+            color: ON_TIME_STAR_COLOUR,
+          }}
+        >
+          Task Completed On Time → 2
+        </p>
+        <p style={{ marginBottom: "5px", color: LATE_STAR_COLOUR }}>
+          Task Completed Late → 1
+        </p>
+        <p style={{ marginBottom: "0", color: INCOMPLETE_STAR_COLOUR }}>
+          Task Incomplete → 0
+        </p>
+        <p>
+          Weekend tasks will be counted as completed on time to encourage taking
+          time off from coding.
+        </p>
+      </div>
+      <Leaderboard users={users} />
     </BasePage>
   );
 };
 
-export const getServerSideProps: GetServerSideProps<HomeProps> = async () => {
+export const getServerSideProps: GetServerSideProps<
+  LeaderboardProps
+> = async () => {
   // Call your API here to fetch the array of users
   const response = await fetch(
     "https://b74pns5xevq4ccyjxnxqscozne0qkvfp.lambda-url.eu-west-2.on.aws/",
