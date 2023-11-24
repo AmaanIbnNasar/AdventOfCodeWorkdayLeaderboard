@@ -3,7 +3,9 @@ import React, { PropsWithChildren } from "react";
 
 const PageWrapper: React.FC<PropsWithChildren> = ({ children }) => (
   <main className="nhsuk-main-wrapper">
-    <Container style={{ minHeight: 400 }}>{children}</Container>
+    <Container style={{ minHeight: 400, minWidth: "55vw" }}>
+      {children}
+    </Container>
   </main>
 );
 
