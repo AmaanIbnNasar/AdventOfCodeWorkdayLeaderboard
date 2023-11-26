@@ -18,6 +18,9 @@ const LeaderboardHeader: React.FC = () => {
       <Header.Container>
         <Header.NavItem href="/">Leaderboard</Header.NavItem>
         <Header.NavItem href="/solutions">Solutions</Header.NavItem>
+        <Header.NavItem href="/upload_solution">
+          Upload a Solution
+        </Header.NavItem>
       </Header.Container>
     </Header>
   );
