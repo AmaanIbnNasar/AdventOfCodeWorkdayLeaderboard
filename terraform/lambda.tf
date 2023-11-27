@@ -36,6 +36,7 @@ resource "aws_lambda_function" "backend_lambda" {
     variables = {
       AOC_LEADERBOARD = var.AOC_LEADERBOARD
       AOC_YEAR        = var.AOC_YEAR
+      AOC_BUCKET      = var.AOC_BUCKET
     }
   }
 }
@@ -56,6 +57,7 @@ resource "aws_lambda_function" "cache_lambda" {
       AOC_COOKIE      = var.AOC_COOKIE
       AOC_LEADERBOARD = var.AOC_LEADERBOARD
       AOC_YEAR        = var.AOC_YEAR
+      AOC_BUCKET      = var.AOC_BUCKET
     }
   }
 }
