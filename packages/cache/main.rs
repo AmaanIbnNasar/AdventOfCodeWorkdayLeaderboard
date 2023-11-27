@@ -1,10 +1,18 @@
 mod config;
 
 use aws_sdk_s3::{primitives::ByteStream, Client};
-use lambda_http::{run, service_fn, Body, Response};
-use reqwest::Url;
+use lambda_runtime::{run, service_fn, Error, LambdaEvent};
 
-async fn function_handler(_: lambda_http::Request) -> Result<Response<Body>, lambda_http::Error> {
+use reqwest::Url;
+use serde::Serialize;
+use serde_json::Value;
+
+#[derive(Serialize)]
+struct Response {
+    message: String,
+}
+
+async fn function_handler(_: LambdaEvent<Value>) -> Result<Response, lambda_runtime::Error> {
     let vars = config::get_environment_variables();
 
     let response_body = get_aoc_response(&vars).await?;
@@ -15,8 +23,6 @@ async fn function_handler(_: lambda_http::Request) -> Result<Response<Body>, lam
     let config = aws_config::from_env().region("eu-west-2").load().await;
     let client = Client::new(&config);
 
-    let response = Response::builder().header("content-type", "application/json");
-
     let cache_update_response = client
         .put_object()
         .bucket(vars.bucket)
@@ -26,15 +32,15 @@ async fn function_handler(_: lambda_http::Request) -> Result<Response<Body>, lam
         .await;
 
     let response = match cache_update_response {
-        Ok(_) => response
-            .status(200)
-            .body("Successfully updated cache".into()),
-        Err(e) => response
-            .status(500)
-            .body(format!("Error updating cache\n{e:?}").into()),
+        Ok(_) => Response {
+            message: "Successfully updated cache".to_string(),
+        },
+        Err(e) => Response {
+            message: format!("Failed to update cache: {}", e),
+        },
     };
 
-    Ok(response.map_err(Box::new)?)
+    Ok(response)
 }
 
 async fn get_aoc_response(vars: &config::EnvironmentVariables) -> Result<String, reqwest::Error> {
@@ -51,7 +57,7 @@ async fn get_aoc_response(vars: &config::EnvironmentVariables) -> Result<String,
 }
 
 #[tokio::main]
-async fn main() -> Result<(), lambda_http::Error> {
+async fn main() -> Result<(), Error> {
     tracing_subscriber::fmt()
         .with_max_level(tracing::Level::INFO)
         // disable printing the name of the module in every log line.

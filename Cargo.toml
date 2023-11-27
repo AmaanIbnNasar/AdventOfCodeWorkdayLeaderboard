@@ -29,3 +29,4 @@ reqwest = { version = "0.11.22", features = ["native-tls-vendored"] }
 chrono = "0.4.31"
 aws-config = { version= "1.0.1", features = ["behavior-version-latest"] }
 aws-sdk-s3 = "1.2.0"
+aws_lambda_events = "0.12.1"
