@@ -129,6 +129,8 @@ async fn get_aoc_leaderboard(is_test: bool) -> Result<AOCResponse, Error> {
         env::var("AOC_LEADERBOARD").expect("AOC_LEADERBOARD environment variable not set");
     let year = env::var("AOC_YEAR").expect("AOC_YEAR environment variable not set");
     
+    tracing::info!("Getting AOC leaderboard");
+
     let response;
     if is_test {
         let response_body = std::fs::read_to_string("./AOC_response.json").unwrap();
@@ -144,31 +146,13 @@ async fn get_aoc_leaderboard(is_test: bool) -> Result<AOCResponse, Error> {
         let response_body = request.send().await?.text().await?;
         response = serde_json::from_str::<AOCResponse>(&response_body)?;
     }
+
+    tracing::info!("AOC leaderboard retrieved successfully");
+
     Ok(response)
 }
 
-#[tokio::main]
-async fn main() -> Result<(), Error> {
-    tracing_subscriber::fmt()
-        .with_max_level(tracing::Level::INFO)
-        // disable printing the name of the module in every log line.
-        .with_target(false)
-        // disabling time is handy because CloudWatch will add the ingestion time.
-        .without_time()
-        .init();
 
-    run(service_fn(function_handler)).await
-}
-
-#[derive(Debug, Serialize)]
-struct Member {
-    name: String,
-    stars: isize,
-    day_statuses: Vec<DayStatus>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    is_owner: Option<bool>,
-    points: usize,
-}
 
 #[derive(Debug, Serialize, Clone, Copy)]
 struct DayStatus {

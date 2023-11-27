@@ -9,10 +9,12 @@ const SolutionModal: React.FC<{ day: any; solution: any }> = ({
   day,
   solution,
 }) => {
+  console.log(solution);
+  const key = `${solution.author}${solution.task}`;
   const [modalIsOpen, setIsOpen] = React.useState(false);
   return (
     <div
-      key={solution.task}
+      key={key}
       style={{
         display: "flex",
         alignItems: "center",
@@ -36,11 +38,11 @@ const SolutionModal: React.FC<{ day: any; solution: any }> = ({
         <button onClick={() => setIsOpen(false)}>Close</button>
         <p>{solution.author}</p>
         <SyntaxHighlighter
-          key={solution.author}
+          key={key}
           language={solution.language}
           showLineNumbers={true}
         >
-          {solution.code}
+          {solution.codeSnippet}
         </SyntaxHighlighter>
       </Modal>
     </div>
@@ -51,80 +53,81 @@ const SolutionDetails: React.FC<{ day: any; solutions: any }> = ({
   day,
   solutions,
 }) => {
+  console.log(solutions);
   return (
     <Details key={day}>
       <Details.Summary>Day {day}</Details.Summary>
       <Details.Text>
-        {solutions.map((solution: any) => {
-          console.log(solution);
-          return (
-            <SolutionModal
-              day={day}
-              solution={solution}
-              key={solution.author}
-            />
-          );
-        })}
+        <Details key={`${day}1`}>
+          <Details.Summary>Task 1</Details.Summary>
+          <Details.Text>
+            {solutions
+              .filter((solution: any) => solution.task == "1")
+              .map((solution: any) => {
+                return (
+                  <SolutionModal
+                    day={day}
+                    solution={solution}
+                    key={solution.author}
+                  />
+                );
+              })}
+          </Details.Text>
+        </Details>
+        <Details key={`${day}2`}>
+          <Details.Summary>Task 2</Details.Summary>
+          <Details.Text>
+            {solutions
+              .filter((solution: any) => solution.task == "2")
+              .map((solution: any) => {
+                return (
+                  <SolutionModal
+                    day={day}
+                    solution={solution}
+                    key={solution.author}
+                  />
+                );
+              })}
+          </Details.Text>
+        </Details>
       </Details.Text>
     </Details>
   );
 };
 
-const Solutions: NextPage = () => {
-  const solutionsByDay = {
-    1: [
-      {
-        author: "Amaan",
-        code: `const a = 1;
-const b = 2
-const c = a + b;
-console.log(c)`,
-        language: "javascript",
-        task: "1",
-      },
-      {
-        author: "Jack",
-        code: `#[derive(Debug, Serialize, Clone, Copy)]
-        struct DayStatus {
-  task_1: TaskStatus,
-  task_2: TaskStatus,
-}`,
-        language: "rust",
-        task: "1",
-      },
-    ],
-    2: [
-      {
-        author: "Amaan",
-        code: `const a = 1;
-const b = 2
-const c = a + b;
-console.log(c)`,
-        language: "javascript",
-        task: "1",
-      },
-      {
-        author: "Jack",
-        code: `#[derive(Debug, Serialize, Clone, Copy)]
-        struct DayStatus {
-  task_1: TaskStatus,
-  task_2: TaskStatus,
-}`,
-        language: "rust",
-        task: "1",
-      },
-    ],
-  };
+type Solution = {
+  author: string;
+  code: string;
+  language: string;
+  task: string;
+};
+
+type SolutionsByDay = {
+  [day: number]: Solution[];
+};
+const Solutions: NextPage<SolutionsByDay> = (props) => {
   return (
     <BasePage>
       <div id="modalRoot">
         <Label isPageHeading>Solutions</Label>
-        {Object.entries(solutionsByDay).map(([day, solutions]) => {
+        {Object.entries(props).map(([day, solutions]) => {
           return <SolutionDetails day={day} solutions={solutions} key={day} />;
         })}
       </div>
     </BasePage>
   );
+};
+
+export const getServerSideProps = async () => {
+  const response = await fetch(
+    "https://vv4v4xxz79.execute-api.eu-west-2.amazonaws.com/default/solutions?day=1&task=1"
+  );
+  console.log(response);
+  const data = await response.json();
+  console.log(data);
+  return {
+    props: data.data,
+  };
 };
 
 export default Solutions;

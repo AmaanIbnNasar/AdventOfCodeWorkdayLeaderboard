@@ -33,10 +33,10 @@ const UploadSolution: NextPage<UploadSolutionProps> = ({ users }) => {
     "swift",
     "typescript",
   ];
-  const [day, setDay] = useState("");
-  const [task, setTask] = useState("");
-  const [username, setUsername] = useState("");
-  const [language, setLanguage] = useState("");
+  const [day, setDay] = useState("1");
+  const [task, setTask] = useState("1");
+  const [username, setUsername] = useState(users[0]);
+  const [language, setLanguage] = useState(LANGUAGES[0]);
   const [codeSnippet, setCodeSnippet] = useState("");
 
   const handleDayChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -65,10 +65,24 @@ const UploadSolution: NextPage<UploadSolutionProps> = ({ users }) => {
     setCodeSnippet(event.target.value);
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     // Handle form submission here
+    console.log(event);
     console.log("SUBMITTED", day, task, username, language, codeSnippet);
+    await fetch(
+      "https://vv4v4xxz79.execute-api.eu-west-2.amazonaws.com/default/upload",
+      {
+        method: "POST",
+        body: JSON.stringify({
+          day,
+          task,
+          username,
+          language,
+          codeSnippet,
+        }),
+      }
+    );
   };
 
   return (
@@ -136,6 +150,7 @@ export const getServerSideProps: GetServerSideProps<
       headers: new Headers([["x-test", "true"]]),
     }
   );
+  console.log(response);
   const fakeUsers = ["user1", "user2", "user3"];
   return {
     props: {

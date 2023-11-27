@@ -1,0 +1,20 @@
+{
+  "name": "AdventOfCodeWorkdayLeaderboard",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:JackSpagnoliNHS/AdventOfCodeWorkdayLeaderboard.git",
+  "author": "amaanibn-nasar1-nhs <amaan.ibn-nasar1@nhs.net>",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/core": "^7.23.3",
+    "@babel/plugin-transform-modules-commonjs": "^7.23.3",
+    "@babel/preset-env": "^7.23.3",
+    "@babel/preset-typescript": "^7.23.3",
+    "@types/jest": "^29.5.8",
+    "babel-plugin-transform-import-meta": "^2.2.1",
+    "esbuild": "^0.19.5",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.1.1",
+    "typescript": "^5.2.2"
+  }
+}
