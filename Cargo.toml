@@ -9,6 +9,10 @@ edition = "2021"
 name = "backend"
 path = "packages/backend/main.rs"
 
+[[bin]]
+name = "cache"
+path = "packages/cache/main.rs"
+
 [dependencies]
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
@@ -23,3 +27,5 @@ tracing-subscriber = { version = "0.3", default-features = false, features = [
 ] }
 reqwest = { version = "0.11.22", features = ["native-tls-vendored"] }
 chrono = "0.4.31"
+aws-config = { version= "1.0.1", features = ["behavior-version-latest"] }
+aws-sdk-dynamodb = "1.2.0"
