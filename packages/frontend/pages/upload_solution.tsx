@@ -1,3 +1,4 @@
+import { User } from "@/presentation/components/UserRow";
 import BasePage from "@/presentation/wrappers/BasePage";
 import { GetServerSideProps, NextPage } from "next";
 import { Button, Form, Label, Select, Textarea } from "nhsuk-react-components";
@@ -144,17 +145,17 @@ export const getServerSideProps: GetServerSideProps<
   UploadSolutionProps
 > = async () => {
   const response = await fetch(
-    "https://b74pns5xevq4ccyjxnxqscozne0qkvfp.lambda-url.eu-west-2.on.aws/",
+    "https://k6jzlmqsxn2bn4jh6ltkiw65ny0fqxmh.lambda-url.eu-west-2.on.aws/",
     {
       method: "GET",
       headers: new Headers([["x-test", "true"]]),
     }
   );
-  console.log(response);
-  const fakeUsers = ["user1", "user2", "user3"];
+  const lambdaResponse: { members: User[] } = await response.json();
+  console.log(lambdaResponse.members);
   return {
     props: {
-      users: fakeUsers,
+      users: lambdaResponse.members.map((user) => user.name),
     },
   };
 };

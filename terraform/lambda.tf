@@ -39,19 +39,22 @@ resource "aws_iam_policy" "lambda_iam_policy" {
         "s3:PutObject"
       ],
       "Resource": [
-        "arn:aws:s3:::*"
+        "arn:aws:s3:::*",
+        "arn:aws:s3:::*/*",
+        "arn:aws:s3:::${var.AOC_BUCKET}",
+        "arn:aws:s3:::${var.AOC_BUCKET}/*"
       ],
       "Effect": "Allow"
     },
     {
       "Action": [
         "dynamodb:BatchGetItem",
-                "dynamodb:GetItem",
-                "dynamodb:Query",
-                "dynamodb:Scan",
-                "dynamodb:BatchWriteItem",
-                "dynamodb:PutItem",
-                "dynamodb:UpdateItem"
+        "dynamodb:GetItem",
+        "dynamodb:Query",
+        "dynamodb:Scan",
+        "dynamodb:BatchWriteItem",
+        "dynamodb:PutItem",
+        "dynamodb:UpdateItem"
       ],
       "Resource": [
         "arn:aws:dynamodb:*:*:table/solutions",

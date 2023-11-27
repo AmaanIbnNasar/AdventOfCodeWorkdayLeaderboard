@@ -49,11 +49,15 @@ export const getServerSideProps: GetServerSideProps<
     "https://k6jzlmqsxn2bn4jh6ltkiw65ny0fqxmh.lambda-url.eu-west-2.on.aws/",
     {
       method: "GET",
-      headers: new Headers([["x-test", "true"]]),
+      headers: new Headers([
+        // ["x-test", "true"],
+        ["x-leaderboard", "1599442"],
+        ["x-year", "2023"],
+      ]),
     }
   );
   const lambdaResponse: { members: User[] } = await response.json();
-  console.log(lambdaResponse.members);
+  console.log(lambdaResponse);
   return {
     props: {
       users: lambdaResponse.members,
