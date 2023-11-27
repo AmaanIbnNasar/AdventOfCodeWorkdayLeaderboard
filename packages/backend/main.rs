@@ -2,25 +2,30 @@ pub mod models;
 
 mod config;
 
+use std::time::SystemTime;
+
 use chrono::{Datelike, TimeZone, Utc};
 use lambda_http::{run, service_fn, Body, Error, Response};
 use models::{
     aocresponse::{AOCMember, AOCResponse},
     lambdaresponse::{get_day_status, DayStatus, Member, TaskStatus},
 };
-use reqwest::{Client, Url};
+
 use serde::Serialize;
 
+use aws_sdk_s3::primitives::DateTime;
 #[derive(Debug, Serialize)]
 struct LambdaResponse {
     message: String,
+    cache_last_updated: i64,
     members: Vec<Member>,
 }
 
 async fn function_handler(request: lambda_http::Request) -> Result<Response<Body>, Error> {
     let vars = config::get_environment_variables(request);
 
-    let leaderboard = get_aoc_leaderboard(&vars).await?;
+    let cache_response = get_aoc_leaderboard(&vars).await?;
+    let leaderboard = cache_response.leaderboard;
 
     let year = leaderboard.event.parse::<i32>().unwrap();
     let response_members = leaderboard.members;
@@ -37,7 +42,12 @@ async fn function_handler(request: lambda_http::Request) -> Result<Response<Body
         ),
         true => format!("Using test leaderboard."),
     };
-    let response = LambdaResponse { message, members };
+    let cache_last_updated = cache_response.last_updated.secs();
+    let response = LambdaResponse {
+        message,
+        members,
+        cache_last_updated,
+    };
     let response_string = serde_json::to_string(&response).unwrap();
     let resp = Response::builder()
         .status(200)
@@ -102,25 +112,48 @@ fn filter_weekend(day: usize, year: i32) -> bool {
     weekday != chrono::Weekday::Sat && weekday != chrono::Weekday::Sun
 }
 
-async fn get_aoc_leaderboard(vars: &config::EnvironmentVariables) -> Result<AOCResponse, Error> {
-    let response;
+struct CacheResponse {
+    last_updated: DateTime,
+    leaderboard: AOCResponse,
+}
+async fn get_aoc_leaderboard(vars: &config::EnvironmentVariables) -> Result<CacheResponse, Error> {
+    let response_body: String;
+    let last_updated: DateTime;
     if vars.test {
-        let response_body = std::fs::read_to_string("./AOC_response.json").unwrap();
-        response = serde_json::from_str::<AOCResponse>(&response_body)?;
+        response_body = std::fs::read_to_string("./AOC_response.json").unwrap();
+        last_updated = DateTime::from(SystemTime::now());
     } else {
-        let url = format!(
-            "https://adventofcode.com/{}/leaderboard/private/view/{}.json",
-            vars.year, vars.leaderboard
-        );
-        let client = Client::new();
-        let request = client
-            .get(Url::parse(&url).unwrap())
-            .header("Content-Type", "application/json;charset=utf-8")
-            .header("Cookie", vars.cookie.clone());
-        let response_body = request.send().await?.text().await?;
-        response = serde_json::from_str::<AOCResponse>(&response_body)?;
+        (response_body, last_updated) = fetch_from_s3(vars).await?;
     }
-    Ok(response)
+
+    let leaderboard = serde_json::from_str::<AOCResponse>(&response_body)?;
+
+    Ok(CacheResponse {
+        last_updated,
+        leaderboard,
+    })
+}
+
+type S3Response = (String, DateTime);
+async fn fetch_from_s3(vars: &config::EnvironmentVariables) -> Result<S3Response, Error> {
+    let cache_key = format!("{}:{}", vars.leaderboard, vars.year);
+
+    let config = aws_config::from_env().region("eu-west-2").load().await;
+    let client = aws_sdk_s3::Client::new(&config);
+
+    let bucket_response = client
+        .get_object()
+        .bucket(vars.bucket.clone())
+        .key(format!("{cache_key}/response.json"))
+        .send()
+        .await?;
+
+    let response_bytes = bucket_response.body.collect().await?.to_vec();
+    let response_body: String = String::from_utf8(response_bytes).unwrap();
+
+    let last_updated = bucket_response.last_modified.unwrap();
+
+    Ok((response_body, last_updated))
 }
 
 #[tokio::main]

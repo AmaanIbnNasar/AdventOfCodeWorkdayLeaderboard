@@ -1,6 +1,6 @@
 mod config;
 
-use aws_sdk_dynamodb::{types::AttributeValue, Client};
+use aws_sdk_s3::{primitives::ByteStream, Client};
 use lambda_http::{run, service_fn, Body, Response};
 use reqwest::Url;
 
@@ -8,6 +8,9 @@ async fn function_handler(_: lambda_http::Request) -> Result<Response<Body>, lam
     let vars = config::get_environment_variables();
 
     let response_body = get_aoc_response(&vars).await?;
+    let response_body_bytes: ByteStream = ByteStream::from(response_body.as_bytes().to_vec());
+
+    let cache_key = format!("{}:{}", vars.leaderboard, vars.year);
 
     let config = aws_config::from_env().region("eu-west-2").load().await;
     let client = Client::new(&config);
@@ -15,12 +18,10 @@ async fn function_handler(_: lambda_http::Request) -> Result<Response<Body>, lam
     let response = Response::builder().header("content-type", "application/json");
 
     let cache_update_response = client
-        .update_item()
-        .table_name("AOC_Cache")
-        .key(
-            format!("{}:{}", vars.leaderboard, vars.year),
-            AttributeValue::S(response_body),
-        )
+        .put_object()
+        .bucket(vars.bucket)
+        .key(format!("{cache_key}/response.json"))
+        .body(response_body_bytes)
         .send()
         .await;
 

@@ -1,11 +1,10 @@
 use std::env;
 
-use lambda_http::Request;
-
 pub(crate) struct EnvironmentVariables {
     pub(crate) cookie: String,
     pub(crate) leaderboard: String,
     pub(crate) year: String,
+    pub(crate) bucket: String,
 }
 
 pub(crate) fn get_environment_variables() -> EnvironmentVariables {
@@ -14,5 +13,6 @@ pub(crate) fn get_environment_variables() -> EnvironmentVariables {
         leaderboard: env::var("AOC_LEADERBOARD")
             .expect("AOC_LEADERBOARD environment variable not set"),
         year: env::var("AOC_YEAR").expect("AOC_YEAR environment variable not set"),
+        bucket: env::var("AOC_BUCKET").expect("AOC_BUCKET environment variable not set"),
     }
 }
