@@ -1,8 +1,7 @@
-use std::{fs::File, collections::HashMap};
 use std::io::BufReader;
+use std::{collections::HashMap, fs::File};
 
-
-use crate::models::{AOCMember, TaskCompletion, DaysCompleted, Day, ResponseMembers};
+use crate::models::aocresponse::{AOCMember, Day, DaysCompleted, ResponseMembers, TaskCompletion};
 
 use super::AOCResponse;
 
@@ -14,18 +13,18 @@ fn test_response_deserialisation() {
 
     let u: Result<AOCResponse, serde_json::Error> = serde_json::from_reader(reader);
 
-    if u.is_err(){
+    if u.is_err() {
         println!("{u:?}");
         panic!()
     }
 
     let response = u.unwrap();
 
-    let member_2388937_day_1_1 = TaskCompletion{
+    let member_2388937_day_1_1 = TaskCompletion {
         star_index: 89302,
         get_star_ts: 1669911189,
     };
-    let member_2388937_day_1_2 = TaskCompletion{
+    let member_2388937_day_1_2 = TaskCompletion {
         star_index: 90973,
         get_star_ts: 1669911672,
     };
@@ -36,7 +35,7 @@ fn test_response_deserialisation() {
     let mut member_2388937_cdl: DaysCompleted = HashMap::new();
     member_2388937_cdl.insert("1".to_string(), member_2388937_day_1);
 
-    let member_2388937 = AOCMember{
+    let member_2388937 = AOCMember {
         global_score: 0,
         stars: 4,
         id: 2388937,
@@ -46,15 +45,15 @@ fn test_response_deserialisation() {
         completion_day_level: member_2388937_cdl,
     };
 
-    let member_2380866_day_3_1 = TaskCompletion{
+    let member_2380866_day_3_1 = TaskCompletion {
         star_index: 602743,
         get_star_ts: 1670064301,
     };
-    let member_2380866_day_3_2 = TaskCompletion{
+    let member_2380866_day_3_2 = TaskCompletion {
         star_index: 608140,
         get_star_ts: 1670065607,
     };
-    let member_2380866_day_16_1 = TaskCompletion{
+    let member_2380866_day_16_1 = TaskCompletion {
         star_index: 3135956,
         get_star_ts: 1671190701,
     };
@@ -69,7 +68,7 @@ fn test_response_deserialisation() {
     member_2380866_cdl.insert("3".to_string(), member_2380866_day_3);
     member_2380866_cdl.insert("16".to_string(), member_2380866_day_16);
 
-    let member_2380866 = AOCMember{
+    let member_2380866 = AOCMember {
         global_score: 0,
         stars: 33,
         id: 2380866,
@@ -82,7 +81,7 @@ fn test_response_deserialisation() {
     let mut expected_members: ResponseMembers = HashMap::new();
     expected_members.insert("2388937".to_string(), member_2388937);
     expected_members.insert("2380866".to_string(), member_2380866);
-    let expected_response = AOCResponse{
+    let expected_response = AOCResponse {
         event: "2022".to_string(),
         owner_id: 1599442,
         members: expected_members,

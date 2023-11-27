@@ -58,7 +58,16 @@ resource "aws_iam_policy" "lambda_iam_policy" {
         "arn:aws:dynamodb:*:*:table/*"
       ],
       "Effect": "Allow"
-    }
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "s3:PutObject"
+      ],
+      "Resource": [
+        "arn:aws:s3:::jackspagnoli-aoc-cache/*"
+      ]
+    },
   ]
 }
 EOF
@@ -71,12 +80,12 @@ resource "aws_iam_role_policy_attachment" "lambda_iam_policy" {
 
 
 resource "aws_lambda_function" "backend_lambda" {
-  filename      = "../package.zip"
+  filename      = "../package_backend.zip"
   function_name = "advent_of_code_leaderboard_backend_lambda"
   role          = aws_iam_role.lambda_role.arn
   handler       = "bootstrap.main"
 
-  source_code_hash = filebase64sha256("../package.zip")
+  source_code_hash = filebase64sha256("../package_cache.zip")
 
   architectures = ["arm64"]
   runtime       = "provided.al2"
@@ -86,6 +95,7 @@ resource "aws_lambda_function" "backend_lambda" {
       AOC_COOKIE      = var.AOC_COOKIE
       AOC_LEADERBOARD = var.AOC_LEADERBOARD
       AOC_YEAR        = var.AOC_YEAR
+      AOC_BUCKET      = var.AOC_BUCKET
     }
   }
 }
@@ -98,6 +108,32 @@ resource "aws_lambda_function_url" "backend_invoke_url" {
 resource "aws_cloudwatch_log_group" "lambda_log_group" {
   name              = "/aws/lambda/advent_of_code_leaderboard_backend_lambda"
   retention_in_days = 14
+}
+
+resource "aws_lambda_function" "cache_lambda" {
+  filename      = "../package_cache.zip"
+  function_name = "advent_of_code_leaderboard_cache_lambda"
+  role          = aws_iam_role.iam_for_cache_lambda.arn
+  handler       = "bootstrap.main"
+
+  source_code_hash = filebase64sha256("../package_cache.zip")
+
+  architectures = ["arm64"]
+  runtime       = "provided.al2"
+
+  environment {
+    variables = {
+      AOC_COOKIE      = var.AOC_COOKIE
+      AOC_LEADERBOARD = var.AOC_LEADERBOARD
+      AOC_YEAR        = var.AOC_YEAR
+      AOC_BUCKET      = var.AOC_BUCKET
+    }
+  }
+}
+
+resource "aws_lambda_function_url" "cache_invoke_url" {
+  function_name      = aws_lambda_function.cache_lambda.function_name
+  authorization_type = "NONE"
 }
 
 resource "aws_lambda_function" "solutions_uploader" {

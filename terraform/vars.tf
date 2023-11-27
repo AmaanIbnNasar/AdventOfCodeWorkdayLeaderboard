@@ -1,9 +1,12 @@
 variable "AOC_COOKIE" {
-  type        = string
+  type = string
 }
 variable "AOC_LEADERBOARD" {
-  type        = string
+  type = string
 }
 variable "AOC_YEAR" {
-  type        = string
+  type = string
+}
+variable "AOC_BUCKET" {
+  type = string
 }
