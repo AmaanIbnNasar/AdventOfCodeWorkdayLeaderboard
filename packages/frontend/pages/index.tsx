@@ -46,7 +46,7 @@ export const getServerSideProps: GetServerSideProps<
 > = async () => {
   // Call your API here to fetch the array of users
   const response = await fetch(
-    "https://b74pns5xevq4ccyjxnxqscozne0qkvfp.lambda-url.eu-west-2.on.aws/",
+    "https://k6jzlmqsxn2bn4jh6ltkiw65ny0fqxmh.lambda-url.eu-west-2.on.aws/",
     {
       method: "GET",
       headers: new Headers([["x-test", "true"]]),

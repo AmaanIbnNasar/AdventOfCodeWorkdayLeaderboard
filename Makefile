@@ -51,6 +51,7 @@ package-all:
 	$(MAKE) package-ts-lambda lambda_name=solutions_uploader
 	$(MAKE) package-ts-lambda lambda_name=solutions_retriever
 	$(MAKE) release-backend
+	$(MAKE) release-cache
 
 package-ts-lambda: 
 	${MAKE} package-node-lambda lambda_name=${lambda_name} index_file=index.ts

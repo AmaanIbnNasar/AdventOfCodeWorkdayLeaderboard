@@ -58,16 +58,7 @@ resource "aws_iam_policy" "lambda_iam_policy" {
         "arn:aws:dynamodb:*:*:table/*"
       ],
       "Effect": "Allow"
-    },
-    {
-      "Effect": "Allow",
-      "Action": [
-        "s3:PutObject"
-      ],
-      "Resource": [
-        "arn:aws:s3:::jackspagnoli-aoc-cache/*"
-      ]
-    },
+    }
   ]
 }
 EOF
@@ -113,7 +104,7 @@ resource "aws_cloudwatch_log_group" "lambda_log_group" {
 resource "aws_lambda_function" "cache_lambda" {
   filename      = "../package_cache.zip"
   function_name = "advent_of_code_leaderboard_cache_lambda"
-  role          = aws_iam_role.iam_for_cache_lambda.arn
+  role          = aws_iam_role.lambda_role.arn
   handler       = "bootstrap.main"
 
   source_code_hash = filebase64sha256("../package_cache.zip")
