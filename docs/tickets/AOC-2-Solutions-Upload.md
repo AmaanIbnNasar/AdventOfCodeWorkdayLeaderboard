@@ -6,12 +6,12 @@ We want users to be able to upload their solutions to the leaderboard. We will i
 
 ## Tasks
 
-- [ ] Create a new lambda to handle the solution upload
-- [ ] Create a new DynamoDB table to store the solutions
-  - [ ] The table should have a partition key of `day` and a sort key of `username`
-  - [ ] The table should have attributes for the solution language and the solution code
-- [ ] Modify the frontend to call the new lambda
-  - [ ] The frontend should call the lambda when the user clicks the submit button
-  - [ ] The frontend should pass the day, language, and code to the lambda
-- [ ] Modify the frontend to display the solutions on the leaderboard
-  - [ ] The frontend should display the solutions for each day on a `day` page
+- [x] Create a new lambda to handle the solution upload
+- [x] Create a new DynamoDB table to store the solutions
+  - [x] The table should have a partition key of `day` and a sort key of `username`
+  - [x] The table should have attributes for the solution language and the solution code
+- [x] Modify the frontend to call the new lambda
+  - [x] The frontend should call the lambda when the user clicks the submit button
+  - [x] The frontend should pass the day, language, and code to the lambda
+- [x] Modify the frontend to display the solutions on the leaderboard
+  - [x] The frontend should display the solutions for each day on a `day` page
