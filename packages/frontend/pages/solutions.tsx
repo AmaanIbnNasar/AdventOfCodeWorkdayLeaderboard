@@ -120,7 +120,7 @@ const Solutions: NextPage<SolutionsByDay> = (props) => {
 
 export const getServerSideProps = async () => {
   const response = await fetch(
-    "https://vv4v4xxz79.execute-api.eu-west-2.amazonaws.com/default/solutions?day=1&task=1"
+    "https://vv4v4xxz79.execute-api.eu-west-2.amazonaws.com/default/solutions?day=1"
   );
   console.log(response);
   const data = await response.json();

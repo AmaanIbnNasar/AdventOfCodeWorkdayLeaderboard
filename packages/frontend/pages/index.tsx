@@ -11,6 +11,9 @@ import BasePage from "@/presentation/wrappers/BasePage";
 import { GetServerSideProps, NextPage } from "next";
 import { Label } from "nhsuk-react-components";
 
+export const API_URL =
+  "https://vv4v4xxz79.execute-api.eu-west-2.amazonaws.com/default/";
+
 const Home: NextPage<LeaderboardProps> = ({ users }) => {
   return (
     <BasePage>
