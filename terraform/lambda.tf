@@ -34,8 +34,6 @@ resource "aws_lambda_function" "backend_lambda" {
 
   environment {
     variables = {
-      AOC_LEADERBOARD = var.AOC_LEADERBOARD
-      AOC_YEAR        = var.AOC_YEAR
       AOC_BUCKET      = var.AOC_BUCKET
     }
   }
