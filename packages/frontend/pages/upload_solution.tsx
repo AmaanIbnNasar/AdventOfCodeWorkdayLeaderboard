@@ -2,7 +2,14 @@ import { User } from "@/presentation/components/UserRow";
 import BasePage from "@/presentation/wrappers/BasePage";
 import { GetServerSideProps, NextPage } from "next";
 import { useRouter } from "next/navigation";
-import { Button, Form, Label, Select, Textarea } from "nhsuk-react-components";
+import {
+  Button,
+  Form,
+  InsetText,
+  Label,
+  Select,
+  Textarea,
+} from "nhsuk-react-components";
 import { useState } from "react";
 
 interface UploadSolutionProps {
@@ -40,6 +47,7 @@ const UploadSolution: NextPage<UploadSolutionProps> = ({ users }) => {
   const [username, setUsername] = useState(users[0]);
   const [language, setLanguage] = useState(LANGUAGES[0]);
   const [codeSnippet, setCodeSnippet] = useState("");
+  const [submittingMessage, setSubmittingMessage] = useState("");
   const handleDayChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setDay(event.target.value);
   };
@@ -78,6 +86,7 @@ const UploadSolution: NextPage<UploadSolutionProps> = ({ users }) => {
       <Label isPageHeading>Upload Solution</Label>
       <Form
         onSubmit={(event) => {
+          setSubmittingMessage("Submitting...");
           handleSubmit(event);
           router.push("/solutions");
         }}
@@ -129,6 +138,13 @@ const UploadSolution: NextPage<UploadSolutionProps> = ({ users }) => {
         />
         <Button type="submit">Submit</Button>
       </Form>
+      {submittingMessage != "" ? (
+        <InsetText>
+          <p>{submittingMessage}</p>
+        </InsetText>
+      ) : (
+        <></>
+      )}
     </BasePage>
   );
 };
