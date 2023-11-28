@@ -1,6 +1,7 @@
 import { User } from "@/presentation/components/UserRow";
 import BasePage from "@/presentation/wrappers/BasePage";
 import { GetServerSideProps, NextPage } from "next";
+import { useRouter } from "next/navigation";
 import { Button, Form, Label, Select, Textarea } from "nhsuk-react-components";
 import { useState } from "react";
 
@@ -39,7 +40,6 @@ const UploadSolution: NextPage<UploadSolutionProps> = ({ users }) => {
   const [username, setUsername] = useState(users[0]);
   const [language, setLanguage] = useState(LANGUAGES[0]);
   const [codeSnippet, setCodeSnippet] = useState("");
-
   const handleDayChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setDay(event.target.value);
   };
@@ -71,25 +71,17 @@ const UploadSolution: NextPage<UploadSolutionProps> = ({ users }) => {
     // Handle form submission here
     console.log(event);
     console.log("SUBMITTED", day, task, username, language, codeSnippet);
-    await fetch(
-      "https://vv4v4xxz79.execute-api.eu-west-2.amazonaws.com/default/upload",
-      {
-        method: "POST",
-        body: JSON.stringify({
-          day,
-          task,
-          username,
-          language,
-          codeSnippet,
-        }),
-      }
-    );
   };
-
+  const router = useRouter();
   return (
     <BasePage>
       <Label isPageHeading>Upload Solution</Label>
-      <Form onSubmit={handleSubmit}>
+      <Form
+        onSubmit={(event) => {
+          handleSubmit(event);
+          router.push("/solutions");
+        }}
+      >
         <div style={{ display: "flex", gap: "20px" }}>
           <Select label="Day" value={day} onChange={handleDayChange}>
             {Array.from({ length: 25 }, (_, index) => (
