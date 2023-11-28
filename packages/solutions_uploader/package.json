@@ -1,0 +1,9 @@
+{
+  "name": "solutions_uploader",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.458.0"
+  }
+}

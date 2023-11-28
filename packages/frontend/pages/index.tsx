@@ -11,6 +11,9 @@ import BasePage from "@/presentation/wrappers/BasePage";
 import { GetServerSideProps, NextPage } from "next";
 import { Label } from "nhsuk-react-components";
 
+export const API_URL =
+  "https://vv4v4xxz79.execute-api.eu-west-2.amazonaws.com/default/";
+
 const Home: NextPage<LeaderboardProps> = ({ users }) => {
   return (
     <BasePage>
@@ -46,14 +49,18 @@ export const getServerSideProps: GetServerSideProps<
 > = async () => {
   // Call your API here to fetch the array of users
   const response = await fetch(
-    "https://b74pns5xevq4ccyjxnxqscozne0qkvfp.lambda-url.eu-west-2.on.aws/",
+    "https://k6jzlmqsxn2bn4jh6ltkiw65ny0fqxmh.lambda-url.eu-west-2.on.aws/",
     {
       method: "GET",
-      headers: new Headers([["x-test", "true"]]),
+      headers: new Headers([
+        // ["x-test", "true"],
+        ["x-leaderboard", "1599442"],
+        ["x-year", "2023"],
+      ]),
     }
   );
   const lambdaResponse: { members: User[] } = await response.json();
-  console.log(lambdaResponse.members);
+  console.log(lambdaResponse);
   return {
     props: {
       users: lambdaResponse.members,
