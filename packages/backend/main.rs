@@ -21,8 +21,34 @@ struct LambdaResponse {
     members: Vec<Member>,
 }
 
+#[derive(Debug, Serialize)]
+struct ErrorResponse {
+    message: String,
+}
+
 async fn function_handler(request: lambda_http::Request) -> Result<Response<Body>, Error> {
-    let vars = config::get_environment_variables(request);
+    let response_builder = Response::builder()
+        .header("content-type", "application/json")
+        .header("Access-Control-Allow-Origin", "*")
+        .header(
+            "Access-Control-Allow-Headers",
+            "Origin, X-Requested-With, Content-Type, Accept",
+        );
+    let response_builder = match get_response(request).await {
+        Ok(response) => {
+            let response_string = serde_json::to_string(&response).unwrap();
+            response_builder.status(200).body(response_string.into())
+        }
+        Err(e) => {
+            let response_string = serde_json::to_string(&ErrorResponse { message: e }).unwrap();
+            response_builder.status(500).body(response_string.into())
+        }
+    };
+    Ok(response_builder.unwrap())
+}
+
+async fn get_response(request: lambda_http::Request) -> Result<LambdaResponse, String> {
+    let vars = config::get_environment_variables(request)?;
 
     let cache_response = get_aoc_leaderboard(&vars).await?;
     let leaderboard = cache_response.leaderboard;
@@ -43,18 +69,11 @@ async fn function_handler(request: lambda_http::Request) -> Result<Response<Body
         true => format!("Using test leaderboard."),
     };
     let cache_last_updated = cache_response.last_updated.secs();
-    let response = LambdaResponse {
+    Ok(LambdaResponse {
         message,
         members,
         cache_last_updated,
-    };
-    let response_string = serde_json::to_string(&response).unwrap();
-    let resp = Response::builder()
-        .status(200)
-        .header("content-type", "application/json")
-        .body(response_string.into())
-        .map_err(Box::new)?;
-    Ok(resp)
+    })
 }
 
 fn parse_member(member: AOCMember, year: i32, id: String, owner_id: isize) -> Member {
@@ -116,17 +135,19 @@ struct CacheResponse {
     last_updated: DateTime,
     leaderboard: AOCResponse,
 }
-async fn get_aoc_leaderboard(vars: &config::EnvironmentVariables) -> Result<CacheResponse, Error> {
+async fn get_aoc_leaderboard(vars: &config::EnvironmentVariables) -> Result<CacheResponse, String> {
     let response_body: String;
     let last_updated: DateTime;
     if vars.test {
-        response_body = std::fs::read_to_string("./AOC_response.json").unwrap();
+        response_body = std::fs::read_to_string("./AOC_response.json")
+            .map_err(|_| "Error accessing test data".to_string())?;
         last_updated = DateTime::from(SystemTime::now());
     } else {
         (response_body, last_updated) = fetch_from_s3(vars).await?;
     }
 
-    let leaderboard = serde_json::from_str::<AOCResponse>(&response_body)?;
+    let leaderboard = serde_json::from_str::<AOCResponse>(&response_body)
+        .map_err(|_| "Error parsing AOC response".to_string())?;
 
     Ok(CacheResponse {
         last_updated,
@@ -135,7 +156,7 @@ async fn get_aoc_leaderboard(vars: &config::EnvironmentVariables) -> Result<Cach
 }
 
 type S3Response = (String, DateTime);
-async fn fetch_from_s3(vars: &config::EnvironmentVariables) -> Result<S3Response, Error> {
+async fn fetch_from_s3(vars: &config::EnvironmentVariables) -> Result<S3Response, String> {
     let cache_key = format!("{}:{}", vars.leaderboard, vars.year);
 
     let config = aws_config::from_env().region("eu-west-2").load().await;
@@ -146,9 +167,15 @@ async fn fetch_from_s3(vars: &config::EnvironmentVariables) -> Result<S3Response
         .bucket(vars.bucket.clone())
         .key(format!("{cache_key}/response.json"))
         .send()
-        .await?;
+        .await
+        .map_err(|_| "Unable to fetch S3 cache")?;
 
-    let response_bytes = bucket_response.body.collect().await?.to_vec();
+    let response_bytes = bucket_response
+        .body
+        .collect()
+        .await
+        .map_err(|_| "Error parsing S3 cache")?
+        .to_vec();
     let response_body: String = String::from_utf8(response_bytes).unwrap();
 
     let last_updated = bucket_response.last_modified.unwrap();
