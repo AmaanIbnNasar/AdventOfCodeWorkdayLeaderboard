@@ -1,6 +1,6 @@
 import type { AppProps } from "next/app";
 import Head from "next/head";
-import { Header } from "nhsuk-react-components";
+import { Footer, Header } from "nhsuk-react-components";
 import React from "react";
 import "../App.scss";
 
@@ -34,6 +34,14 @@ export default function App({ Component, pageProps }: AppProps) {
       </Head>
       <LeaderboardHeader />
       <Component {...pageProps} />
+      <Footer>
+        <p aria-label="footer-text">
+          Please contact{" "}
+          <a href="mailto:amaan.ibn-nasar1@nhs.net">Amaan Ibn-Nasar</a> or{" "}
+          <a href="mailto:jack.spagnoli1@nhs.net">Jack Spagnoli</a> with any
+          questions or suggestions.
+        </p>
+      </Footer>
     </>
   );
 }
