@@ -6,6 +6,6 @@ The frontend needs to be hosted somewhere. We will implement this by using ampli
 
 ## Tasks
 
-- [ ] Create domain
-- [ ] Create amplify project
-- [ ] Host on amplify
+- [x] Create domain
+- [x] Create amplify project
+- [x] Host on amplify
