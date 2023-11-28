@@ -27,23 +27,24 @@ struct ErrorResponse {
 }
 
 async fn function_handler(request: lambda_http::Request) -> Result<Response<Body>, Error> {
-    match get_response(request).await {
+    let response_builder = Response::builder()
+        .header("content-type", "application/json")
+        .header("Access-Control-Allow-Origin", "*")
+        .header(
+            "Access-Control-Allow-Headers",
+            "Origin, X-Requested-With, Content-Type, Accept",
+        );
+    let response_builder = match get_response(request).await {
         Ok(response) => {
             let response_string = serde_json::to_string(&response).unwrap();
-            let resp = Response::builder()
-                .status(200)
-                .header("content-type", "application/json")
-                .body(response_string.into())
-                .map_err(Box::new)?;
-            Ok(resp)
+            response_builder.status(200).body(response_string.into())
         }
         Err(e) => {
             let response_string = serde_json::to_string(&ErrorResponse { message: e }).unwrap();
-            Ok(Response::builder()
-            .status(500)
-            .body(response_string.into())
-            .map_err(Box::new)?)},
-    }
+            response_builder.status(500).body(response_string.into())
+        }
+    };
+    Ok(response_builder.unwrap())
 }
 
 async fn get_response(request: lambda_http::Request) -> Result<LambdaResponse, String> {
@@ -138,13 +139,15 @@ async fn get_aoc_leaderboard(vars: &config::EnvironmentVariables) -> Result<Cach
     let response_body: String;
     let last_updated: DateTime;
     if vars.test {
-        response_body = std::fs::read_to_string("./AOC_response.json").map_err(|_| "Error accessing test data".to_string())?;
+        response_body = std::fs::read_to_string("./AOC_response.json")
+            .map_err(|_| "Error accessing test data".to_string())?;
         last_updated = DateTime::from(SystemTime::now());
     } else {
         (response_body, last_updated) = fetch_from_s3(vars).await?;
     }
 
-    let leaderboard = serde_json::from_str::<AOCResponse>(&response_body).map_err(|_| "Error parsing AOC response".to_string())?;
+    let leaderboard = serde_json::from_str::<AOCResponse>(&response_body)
+        .map_err(|_| "Error parsing AOC response".to_string())?;
 
     Ok(CacheResponse {
         last_updated,
@@ -164,9 +167,15 @@ async fn fetch_from_s3(vars: &config::EnvironmentVariables) -> Result<S3Response
         .bucket(vars.bucket.clone())
         .key(format!("{cache_key}/response.json"))
         .send()
-        .await.map_err(|_| "Unable to fetch S3 cache")?;
+        .await
+        .map_err(|_| "Unable to fetch S3 cache")?;
 
-    let response_bytes = bucket_response.body.collect().await.map_err(|_| "Error parsing S3 cache")?.to_vec();
+    let response_bytes = bucket_response
+        .body
+        .collect()
+        .await
+        .map_err(|_| "Error parsing S3 cache")?
+        .to_vec();
     let response_body: String = String::from_utf8(response_bytes).unwrap();
 
     let last_updated = bucket_response.last_modified.unwrap();
