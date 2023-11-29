@@ -107,10 +107,14 @@ type SolutionsByDay = {
   [day: number]: Solution[];
 };
 const Solutions: NextPage<SolutionsByDay> = (props) => {
+  const noSolutions = Object.values(props).every(
+    (solutions) => solutions.length === 0
+  );
   return (
     <BasePage>
       <div id="modalRoot">
         <Label isPageHeading>Solutions</Label>
+        {noSolutions && <p>No solutions yet</p>}
         {Object.entries(props).map(([day, solutions]) => {
           return <SolutionDetails day={day} solutions={solutions} key={day} />;
         })}
