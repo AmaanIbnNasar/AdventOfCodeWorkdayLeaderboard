@@ -21,6 +21,9 @@ const Home: NextPage<LeaderboardProps> = ({ users }) => {
       <div className="container mx-auto py-5">
         <h1 className="text-4xl font-bold">Leaderboard</h1>
         <div className="py-5 space-y-2">
+          <a className="text-blue-700 text-xl" href="https://adventofcode.com/">
+            Advent of Code Tasks
+          </a>
           <p className="text-xl italic">
             This board only updates every 15 minutes due to api rate limiting
           </p>
