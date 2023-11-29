@@ -13,7 +13,11 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ users }) => {
           <th>Username</th>
           <th>Points</th>
           {Array.from({ length: 25 }, (_, index) => (
-            <th key={index + 1}>{`${index + 1}`}</th>
+            <th key={index + 1}>
+              <a href={`https://adventofcode.com/2023/day/${index + 1}`}>{`${
+                index + 1
+              }`}</a>
+            </th>
           ))}
         </tr>
       </thead>
