@@ -1,6 +1,5 @@
 import { faStar, faStarHalfAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Table } from "nhsuk-react-components";
 
 type TaskStatus = "OnTime" | "Late" | "Incomplete";
 
@@ -84,15 +83,15 @@ const createStar = (task_1: TaskStatus, task_2: TaskStatus) => {
 
 const UserRow: React.FC<UserRowProps> = ({ user }) => {
   return (
-    <Table.Row>
-      <Table.Cell>{user.name}</Table.Cell>
-      <Table.Cell>{user.points}</Table.Cell>
+    <tr>
+      <td>{user.name}</td>
+      <td>{user.points}</td>
       {user.day_statuses.map((day_statuses) => (
-        <Table.Cell key={user.name}>
+        <td key={user.name}>
           {createStar(day_statuses.task_1, day_statuses.task_2)}
-        </Table.Cell>
+        </td>
       ))}
-    </Table.Row>
+    </tr>
   );
 };
 

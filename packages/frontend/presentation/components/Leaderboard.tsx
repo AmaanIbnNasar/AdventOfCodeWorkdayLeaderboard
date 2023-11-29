@@ -1,4 +1,4 @@
-import { Table } from "nhsuk-react-components";
+import React from "react";
 import UserRow, { User } from "./UserRow";
 
 export interface LeaderboardProps {
@@ -7,24 +7,24 @@ export interface LeaderboardProps {
 
 const Leaderboard: React.FC<LeaderboardProps> = ({ users }) => {
   return (
-    <Table style={{ width: 500 }} responsive>
-      <Table.Head>
-        <Table.Row>
-          <Table.Cell>Username</Table.Cell>
-          <Table.Cell>Points</Table.Cell>
+    <table className="table-auto w-full">
+      <thead>
+        <tr>
+          <th>Username</th>
+          <th>Points</th>
           {Array.from({ length: 25 }, (_, index) => (
-            <Table.Cell key={index + 1}>{`${index + 1}`}</Table.Cell>
+            <th key={index + 1}>{`${index + 1}`}</th>
           ))}
-        </Table.Row>
-      </Table.Head>
-      <Table.Body>
+        </tr>
+      </thead>
+      <tbody>
         {users
           .sort((a, b) => b.points - a.points)
           .map((user) => (
             <UserRow key={user.name} user={user} />
           ))}
-      </Table.Body>
-    </Table>
+      </tbody>
+    </table>
   );
 };
 
