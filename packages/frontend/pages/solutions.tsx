@@ -1,6 +1,5 @@
 import BasePage from "@/presentation/wrappers/BasePage";
 import { NextPage } from "next";
-import { Button, Details, Label } from "nhsuk-react-components";
 import React from "react";
 import Modal from "react-modal";
 import SyntaxHighlighter from "react-syntax-highlighter";
@@ -21,8 +20,13 @@ const SolutionModal: React.FC<{ day: any; solution: any }> = ({
         justifyContent: "space-between",
       }}
     >
-      <h2>{solution.author}</h2>
-      <Button onClick={() => setIsOpen(true)}>Open Solution</Button>
+      <h2 className="font-bold">{solution.author}</h2>
+      <button
+        className="bg-blue-500 text-white px-4 py-2 rounded"
+        onClick={() => setIsOpen(true)}
+      >
+        Open Solution
+      </button>
       <Modal
         isOpen={modalIsOpen}
         onRequestClose={() => setIsOpen(false)}
@@ -35,15 +39,22 @@ const SolutionModal: React.FC<{ day: any; solution: any }> = ({
           },
         }}
       >
-        <button onClick={() => setIsOpen(false)}>Close</button>
-        <p>{solution.author}</p>
-        <SyntaxHighlighter
-          key={key}
-          language={solution.language}
-          showLineNumbers={true}
-        >
-          {solution.codeSnippet}
-        </SyntaxHighlighter>
+        <div className="space-y-5">
+          <button
+            className="bg-blue-500 text-white px-4 py-2 rounded"
+            onClick={() => setIsOpen(false)}
+          >
+            Close
+          </button>
+          <p className="font-bold">{solution.author}</p>
+          <SyntaxHighlighter
+            key={key}
+            language={solution.language}
+            showLineNumbers={true}
+          >
+            {solution.codeSnippet}
+          </SyntaxHighlighter>
+        </div>
       </Modal>
     </div>
   );
@@ -51,9 +62,9 @@ const SolutionModal: React.FC<{ day: any; solution: any }> = ({
 
 const renderSolutionDetails = (day: string, task: string, solutions: any[]) => {
   return (
-    <Details key={`${day}${task}`}>
-      <Details.Summary>Task {task}</Details.Summary>
-      <Details.Text>
+    <details key={`${day}${task}`} className="border p-4 mb-4 space-y-2">
+      <summary className="font-bold">Task {task}</summary>
+      <div className="space-y-2">
         {solutions
           .filter((solution: any) => solution.task === task)
           .map((solution: any) => {
@@ -65,8 +76,8 @@ const renderSolutionDetails = (day: string, task: string, solutions: any[]) => {
               />
             );
           })}
-      </Details.Text>
-    </Details>
+      </div>
+    </details>
   );
 };
 
@@ -82,17 +93,19 @@ const SolutionDetails: React.FC<{ day: any; solutions: any }> = ({
     (solution: any) => solution.task == "2"
   );
   return (
-    <Details key={day}>
-      <Details.Summary>Day {day}</Details.Summary>
-      {task1SolutionsExist || task2SolutionsExist ? (
-        <Details.Text>
-          {task1SolutionsExist && renderSolutionDetails(day, "1", solutions)}
-          {task2SolutionsExist && renderSolutionDetails(day, "2", solutions)}
-        </Details.Text>
-      ) : (
-        <Details.Text>No solutions yet</Details.Text>
-      )}
-    </Details>
+    <div key={day} className="border p-4 mb-4">
+      <details>
+        <summary className="font-bold">Day {day}</summary>
+        {task1SolutionsExist || task2SolutionsExist ? (
+          <div className="space-y-2">
+            {task1SolutionsExist && renderSolutionDetails(day, "1", solutions)}
+            {task2SolutionsExist && renderSolutionDetails(day, "2", solutions)}
+          </div>
+        ) : (
+          <p>No solutions yet</p>
+        )}
+      </details>
+    </div>
   );
 };
 
@@ -112,9 +125,9 @@ const Solutions: NextPage<SolutionsByDay> = (props) => {
   );
   return (
     <BasePage>
-      <div id="modalRoot">
-        <Label isPageHeading>Solutions</Label>
-        {noSolutions && <p>No solutions yet</p>}
+      <div id="modalRoot" className="py-10 space-y-5">
+        <h1 className="text-4xl font-bold">Solutions</h1>
+        {noSolutions && <p className="text-3xl italic">No solutions yet</p>}
         {Object.entries(props).map(([day, solutions]) => {
           return <SolutionDetails day={day} solutions={solutions} key={day} />;
         })}

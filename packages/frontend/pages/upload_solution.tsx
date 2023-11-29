@@ -2,14 +2,6 @@ import { User } from "@/presentation/components/UserRow";
 import BasePage from "@/presentation/wrappers/BasePage";
 import { GetServerSideProps, NextPage } from "next";
 import { useRouter } from "next/navigation";
-import {
-  Button,
-  Form,
-  InsetText,
-  Label,
-  Select,
-  Textarea,
-} from "nhsuk-react-components";
 import { useState } from "react";
 import { API_URL } from ".";
 
@@ -94,67 +86,99 @@ const UploadSolution: NextPage<UploadSolutionProps> = ({ users }) => {
   const router = useRouter();
   return (
     <BasePage>
-      <Label isPageHeading>Upload Solution</Label>
-      <Form
-        onSubmit={(event) => {
-          setSubmittingMessage("Submitting...");
-          handleSubmit(event);
-          router.push("/solutions");
-        }}
-      >
-        <div style={{ display: "flex", gap: "20px" }}>
-          <Select label="Day" value={day} onChange={handleDayChange}>
-            {Array.from({ length: 25 }, (_, index) => (
-              <option key={index + 1} value={index + 1}>
-                {index + 1}
-              </option>
-            ))}
-          </Select>
-          <Select label="Task" value={task} onChange={handleTaskChange}>
-            {Array.from({ length: 2 }, (_, index) => (
-              <option key={index + 1} value={index + 1}>
-                {index + 1}
-              </option>
-            ))}
-          </Select>
-        </div>
-        <Select
-          label="Username"
-          value={username}
-          onChange={handleUsernameChange}
+      <h1 className="text-2xl font-bold py-10">Upload Solution</h1>
+      <div className="container max-w-fit mx-auto p-4 bg-white shadow-md rounded-md text-2xl">
+        <form
+          onSubmit={(event) => {
+            setSubmittingMessage("Submitting...");
+            handleSubmit(event);
+            router.push("/solutions");
+          }}
+          className="space-y-5"
         >
-          {users.map((user) => (
-            <option key={user} value={user}>
-              {user}
-            </option>
-          ))}
-        </Select>
-        <Select
-          label="Language"
-          value={language}
-          onChange={handleLanguageChange}
-        >
-          {LANGUAGES.map((language) => (
-            <option key={language} value={language}>
-              {language}
-            </option>
-          ))}
-        </Select>
-        <Textarea
-          label="Code Snippet"
-          hint="Please copy and paste your code here"
-          rows={5}
-          value={codeSnippet}
-          onChange={handleCodeSnippetChange}
-        />
-        <Button type="submit">Submit</Button>
-      </Form>
-      {submittingMessage != "" ? (
-        <InsetText>
+          <div className="flex gap-10 items-center">
+            <label htmlFor="day" className="italic">
+              Day
+            </label>
+            <select
+              className="border border-gray-300 rounded p-2"
+              value={day}
+              onChange={handleDayChange}
+              id="day"
+            >
+              {Array.from({ length: 25 }, (_, index) => (
+                <option key={index + 1} value={index + 1}>
+                  {index + 1}
+                </option>
+              ))}
+            </select>
+            <label htmlFor="task" className="italic">
+              Task
+            </label>
+            <select
+              className="border border-gray-300 rounded p-2"
+              value={task}
+              onChange={handleTaskChange}
+              id="task"
+            >
+              {Array.from({ length: 2 }, (_, index) => (
+                <option key={index + 1} value={index + 1}>
+                  {index + 1}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="flex gap-10 items-center">
+            <label htmlFor="username" className="italic">
+              Username
+            </label>
+            <select
+              className="border border-gray-300 rounded p-2"
+              value={username}
+              onChange={handleUsernameChange}
+              id="username"
+            >
+              {users.map((user) => (
+                <option key={user} value={user}>
+                  {user}
+                </option>
+              ))}
+            </select>
+            <label htmlFor="language" className="italic">
+              Language
+            </label>
+            <select
+              className="border border-gray-300 rounded p-2"
+              value={language}
+              onChange={handleLanguageChange}
+              id="language"
+            >
+              {LANGUAGES.map((language) => (
+                <option key={language} value={language}>
+                  {language}
+                </option>
+              ))}
+            </select>
+          </div>
+          <textarea
+            className="border border-gray-300 rounded p-2 w-full"
+            placeholder="Please copy and paste your code here"
+            rows={5}
+            value={codeSnippet}
+            onChange={handleCodeSnippetChange}
+          />
+          <button
+            className="bg-blue-500 text-white px-4 py-2 rounded"
+            type="submit"
+          >
+            Submit
+          </button>
+        </form>
+      </div>
+      {submittingMessage !== "" && (
+        <div className="bg-gray-100 p-2">
           <p>{submittingMessage}</p>
-        </InsetText>
-      ) : (
-        <></>
+        </div>
       )}
     </BasePage>
   );
