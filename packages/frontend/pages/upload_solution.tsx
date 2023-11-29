@@ -11,6 +11,7 @@ import {
   Textarea,
 } from "nhsuk-react-components";
 import { useState } from "react";
+import { API_URL } from ".";
 
 interface UploadSolutionProps {
   users: string[];
@@ -79,6 +80,16 @@ const UploadSolution: NextPage<UploadSolutionProps> = ({ users }) => {
     // Handle form submission here
     console.log(event);
     console.log("SUBMITTED", day, task, username, language, codeSnippet);
+    fetch(`${API_URL}/upload`, {
+      method: "POST",
+      body: JSON.stringify({
+        day,
+        task,
+        username,
+        language,
+        codeSnippet,
+      }),
+    });
   };
   const router = useRouter();
   return (
