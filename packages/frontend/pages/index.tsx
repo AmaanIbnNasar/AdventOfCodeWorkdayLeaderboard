@@ -21,6 +21,9 @@ const Home: NextPage<LeaderboardProps> = ({ users }) => {
       <div className="container mx-auto py-5">
         <h1 className="text-4xl font-bold">Leaderboard</h1>
         <div className="py-5 space-y-2">
+          <p className="text-xl italic">
+            This board only updates every 15 minutes due to api rate limiting
+          </p>
           <p className="text-xl">Points are calculated as follows:</p>
           <div className="flex items-center space-x-2">
             <Star starIcon={faStar} colour={ON_TIME_STAR_COLOUR} />
