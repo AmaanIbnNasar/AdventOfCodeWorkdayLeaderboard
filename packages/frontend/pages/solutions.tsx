@@ -49,48 +49,49 @@ const SolutionModal: React.FC<{ day: any; solution: any }> = ({
   );
 };
 
+const renderSolutionDetails = (day: string, task: string, solutions: any[]) => {
+  return (
+    <Details key={`${day}${task}`}>
+      <Details.Summary>Task {task}</Details.Summary>
+      <Details.Text>
+        {solutions
+          .filter((solution: any) => solution.task === task)
+          .map((solution: any) => {
+            return (
+              <SolutionModal
+                day={day}
+                solution={solution}
+                key={solution.author}
+              />
+            );
+          })}
+      </Details.Text>
+    </Details>
+  );
+};
+
 const SolutionDetails: React.FC<{ day: any; solutions: any }> = ({
   day,
   solutions,
 }) => {
   console.log(solutions);
+  const task1SolutionsExist = solutions.some(
+    (solution: any) => solution.task == "1"
+  );
+  const task2SolutionsExist = solutions.some(
+    (solution: any) => solution.task == "2"
+  );
   return (
     <Details key={day}>
       <Details.Summary>Day {day}</Details.Summary>
-      <Details.Text>
-        <Details key={`${day}1`}>
-          <Details.Summary>Task 1</Details.Summary>
-          <Details.Text>
-            {solutions
-              .filter((solution: any) => solution.task == "1")
-              .map((solution: any) => {
-                return (
-                  <SolutionModal
-                    day={day}
-                    solution={solution}
-                    key={solution.author}
-                  />
-                );
-              })}
-          </Details.Text>
-        </Details>
-        <Details key={`${day}2`}>
-          <Details.Summary>Task 2</Details.Summary>
-          <Details.Text>
-            {solutions
-              .filter((solution: any) => solution.task == "2")
-              .map((solution: any) => {
-                return (
-                  <SolutionModal
-                    day={day}
-                    solution={solution}
-                    key={solution.author}
-                  />
-                );
-              })}
-          </Details.Text>
-        </Details>
-      </Details.Text>
+      {task1SolutionsExist || task2SolutionsExist ? (
+        <Details.Text>
+          {task1SolutionsExist && renderSolutionDetails(day, "1", solutions)}
+          {task2SolutionsExist && renderSolutionDetails(day, "2", solutions)}
+        </Details.Text>
+      ) : (
+        <Details.Text>No solutions yet</Details.Text>
+      )}
     </Details>
   );
 };
