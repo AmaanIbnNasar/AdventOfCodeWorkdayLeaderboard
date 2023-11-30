@@ -11,6 +11,7 @@ import {
 import BasePage from "@/presentation/wrappers/BasePage";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { GetServerSideProps, NextPage } from "next";
+import { Tooltip } from "react-tooltip";
 
 export const API_URL =
   "https://vv4v4xxz79.execute-api.eu-west-2.amazonaws.com/default/";
@@ -63,6 +64,7 @@ const Home: NextPage<LeaderboardProps> = ({ users }) => {
           </p>
         </div>
       </div>
+      <Tooltip id="mytooltip" />
       <Leaderboard users={users} />
     </BasePage>
   );
