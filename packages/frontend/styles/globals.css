@@ -11,7 +11,9 @@
 th,
 td {
   padding-right: 20px;
-  font-size: x-large;
+  font-size: large;
+  padding-top: 0px;
+  padding-bottom: 0px;
 }
 
 details {

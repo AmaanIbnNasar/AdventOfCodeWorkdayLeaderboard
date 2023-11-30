@@ -84,7 +84,7 @@ export const getServerSideProps: GetServerSideProps<
     }
   );
   const lambdaResponse: { members: User[] } = await response.json();
-  console.log(lambdaResponse);
+  console.log(lambdaResponse.members[0].day_statuses);
   return {
     props: {
       users: lambdaResponse.members,
