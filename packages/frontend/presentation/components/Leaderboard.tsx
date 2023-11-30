@@ -10,7 +10,7 @@ export const WEEKENDS = [2, 3, 9, 10, 16, 17, 23, 24, 30, 31];
 const Leaderboard: React.FC<LeaderboardProps> = ({ users }) => {
   return (
     <table className="table-auto w-full">
-      <thead>
+      <thead style={{ position: "sticky", top: 64, background: "white" }}>
         <tr>
           <th className="text-left">Username</th>
           <th>Points</th>

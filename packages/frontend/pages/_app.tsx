@@ -6,7 +6,7 @@ import "../styles/globals.css";
 
 const LeaderboardHeader: React.FC = () => {
   return (
-    <div className="bg-green-800">
+    <div className="bg-green-800" style={{ position: "sticky", top: 0 }}>
       <div className="container mx-auto flex justify-between items-center py-4">
         <a href="/" className="text-2xl text-white font-bold">
           Advent of Code Leaderboard
