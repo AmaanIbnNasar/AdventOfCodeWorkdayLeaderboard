@@ -64,7 +64,6 @@ const Home: NextPage<LeaderboardProps> = ({ users }) => {
           </p>
         </div>
       </div>
-      <Tooltip id="mytooltip" />
       <Leaderboard users={users} />
     </BasePage>
   );

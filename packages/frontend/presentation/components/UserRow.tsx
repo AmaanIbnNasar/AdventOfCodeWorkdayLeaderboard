@@ -1,9 +1,8 @@
 import { faStar, faStarHalfAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Tooltip } from "react-tooltip";
-import { WEEKENDS } from "./Leaderboard";
-import { useEffect } from "react";
 import "react-tooltip/dist/react-tooltip.css";
+import { WEEKENDS } from "./Leaderboard";
 
 type TaskStatus = "OnTime" | "Late" | "Incomplete";
 
@@ -92,9 +91,10 @@ const UserRow: React.FC<UserRowProps> = ({ user }) => {
     : user.name;
   return (
     <>
+      {nameIsTruncated && <Tooltip id={user.name} />}
       <tr>
         <td
-          data-tooltip-id={"mytooltip"}
+          data-tooltip-id={user.name}
           data-tooltip-content={user.name}
           data-tooltip-place="top"
         >
