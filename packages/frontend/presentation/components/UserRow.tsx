@@ -1,5 +1,6 @@
 import { faStar, faStarHalfAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Tooltip } from "react-tooltip";
 import { WEEKENDS } from "./Leaderboard";
 
 type TaskStatus = "OnTime" | "Late" | "Incomplete";
@@ -83,26 +84,37 @@ const createStar = (task_1: TaskStatus, task_2: TaskStatus) => {
 };
 
 const UserRow: React.FC<UserRowProps> = ({ user }) => {
-  const truncatedName =
-    user.name.length > 13 ? user.name.substring(0, 13) + "..." : user.name;
+  const nameIsTruncated = user.name.length > 13;
+  const truncatedName = nameIsTruncated
+    ? user.name.substring(0, 13) + "..."
+    : user.name;
   return (
-    <tr>
-      <td>{truncatedName}</td>
-      <td className="text-center">{user.points}</td>
-      {user.day_statuses.map((day_statuses, i) => (
-        <td key={user.name} className="text-center">
-          <div
-            style={{
-              background: WEEKENDS.includes(i + 1)
-                ? "rgba(22, 101, 52, 0.3)"
-                : "white",
-            }}
-          >
-            {createStar(day_statuses.task_1, day_statuses.task_2)}
-          </div>
+    <>
+      {nameIsTruncated && <Tooltip id={user.name} />}
+      <tr>
+        <td
+          data-tooltip-id={user.name}
+          data-tooltip-content={user.name}
+          data-tooltip-place="top"
+        >
+          {truncatedName}
         </td>
-      ))}
-    </tr>
+        <td className="text-center">{user.points}</td>
+        {user.day_statuses.map((day_statuses, i) => (
+          <td key={user.name} className="text-center">
+            <div
+              style={{
+                background: WEEKENDS.includes(i + 1)
+                  ? "rgba(22, 101, 52, 0.3)"
+                  : "white",
+              }}
+            >
+              {createStar(day_statuses.task_1, day_statuses.task_2)}
+            </div>
+          </td>
+        ))}
+      </tr>
+    </>
   );
 };
 
