@@ -2,6 +2,8 @@ import { faStar, faStarHalfAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Tooltip } from "react-tooltip";
 import { WEEKENDS } from "./Leaderboard";
+import { useEffect } from "react";
+import "react-tooltip/dist/react-tooltip.css";
 
 type TaskStatus = "OnTime" | "Late" | "Incomplete";
 
