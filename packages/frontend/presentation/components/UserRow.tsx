@@ -103,7 +103,7 @@ const UserRow: React.FC<UserRowProps> = ({ user }) => {
         </td>
         <td className="text-center">{user.points}</td>
         {user.day_statuses.map((day_statuses, i) => (
-          <td key={username} className="text-center">
+          <td key={`${username}/${i}`} className="text-center">
             <div
               style={{
                 background: WEEKENDS.includes(i + 1)
