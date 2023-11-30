@@ -89,20 +89,21 @@ const UserRow: React.FC<UserRowProps> = ({ user }) => {
   const truncatedName = nameIsTruncated
     ? user.name.substring(0, 13) + "..."
     : user.name;
+  const username = user.name;
   return (
     <>
-      {nameIsTruncated && <Tooltip id={user.name} />}
+      {nameIsTruncated && <Tooltip id={username} />}
       <tr>
         <td
-          data-tooltip-id={user.name}
-          data-tooltip-content={user.name}
+          data-tooltip-id={username}
+          data-tooltip-content={username}
           data-tooltip-place="top"
         >
           {truncatedName}
         </td>
         <td className="text-center">{user.points}</td>
         {user.day_statuses.map((day_statuses, i) => (
-          <td key={user.name} className="text-center">
+          <td key={username} className="text-center">
             <div
               style={{
                 background: WEEKENDS.includes(i + 1)
