@@ -23,7 +23,12 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ users }) => {
       </thead>
       <tbody>
         {users
-          .sort((a, b) => b.points - a.points)
+          .sort((a, b) => {
+            if (a.points == b.points) {
+              return a.name.localeCompare(b.name);
+            }
+            return b.points - a.points;
+          })
           .map((user) => (
             <UserRow key={user.name} user={user} />
           ))}
