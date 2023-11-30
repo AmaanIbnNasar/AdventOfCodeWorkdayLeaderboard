@@ -1,5 +1,6 @@
 import { faStar, faStarHalfAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { WEEKENDS } from "./Leaderboard";
 
 type TaskStatus = "OnTime" | "Late" | "Incomplete";
 
@@ -82,13 +83,23 @@ const createStar = (task_1: TaskStatus, task_2: TaskStatus) => {
 };
 
 const UserRow: React.FC<UserRowProps> = ({ user }) => {
+  const truncatedName =
+    user.name.length > 13 ? user.name.substring(0, 13) + "..." : user.name;
   return (
     <tr>
-      <td>{user.name}</td>
-      <td>{user.points}</td>
-      {user.day_statuses.map((day_statuses) => (
-        <td key={user.name}>
-          {createStar(day_statuses.task_1, day_statuses.task_2)}
+      <td>{truncatedName}</td>
+      <td className="text-center">{user.points}</td>
+      {user.day_statuses.map((day_statuses, i) => (
+        <td key={user.name} className="text-center">
+          <div
+            style={{
+              background: WEEKENDS.includes(i + 1)
+                ? "rgba(22, 101, 52, 0.3)"
+                : "white",
+            }}
+          >
+            {createStar(day_statuses.task_1, day_statuses.task_2)}
+          </div>
         </td>
       ))}
     </tr>
