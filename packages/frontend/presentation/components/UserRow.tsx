@@ -91,7 +91,7 @@ const UserRow: React.FC<UserRowProps> = ({ user }) => {
     : user.name;
   return (
     <>
-      <Tooltip id={user.name} />
+      {nameIsTruncated && <Tooltip id={user.name} />}
       <tr>
         <td
           data-tooltip-id={user.name}
