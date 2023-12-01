@@ -89,7 +89,7 @@ fn parse_member(member: AOCMember, year: i32, id: String, owner_id: isize) -> Me
     let is_owner = is_owner(id, owner_id);
     let points = calculate_points(&day_statuses, year);
     Member {
-        name: member.name,
+        name: member.name.unwrap_or("Anonymous".to_string()),
         stars: member.stars,
         day_statuses,
         is_owner,

@@ -8,7 +8,7 @@ use super::AOCResponse;
 #[test]
 fn test_response_deserialisation() {
     let file =
-        File::open("packages/backend/models/test/test_response.json").expect("Unable to open file");
+        File::open("packages/backend/models/aocresponse/test/test_response.json").expect("Unable to open file");
     let reader = BufReader::new(file);
 
     let u: Result<AOCResponse, serde_json::Error> = serde_json::from_reader(reader);
@@ -39,7 +39,7 @@ fn test_response_deserialisation() {
         global_score: 0,
         stars: 4,
         id: 2388937,
-        name: "john-kieran-robson".to_string(),
+        name: None,
         local_score: 18,
         last_star_ts: 1670427732,
         completion_day_level: member_2388937_cdl,
@@ -72,7 +72,7 @@ fn test_response_deserialisation() {
         global_score: 0,
         stars: 33,
         id: 2380866,
-        name: "JackSpagnoli".to_string(),
+        name: Some("JackSpagnoli".to_string()),
         local_score: 422,
         last_star_ts: 1671835603,
         completion_day_level: member_2380866_cdl,

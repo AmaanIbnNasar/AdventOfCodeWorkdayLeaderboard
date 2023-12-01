@@ -18,7 +18,7 @@ pub struct AOCMember {
     pub global_score: isize,
 	    pub stars: isize,
 	    pub id: isize,
-	    pub name: String,
+	    pub name: Option<String>,
 	    pub local_score: isize,
 	    pub last_star_ts: isize,
 	    pub completion_day_level: DaysCompleted
