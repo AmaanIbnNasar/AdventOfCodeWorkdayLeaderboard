@@ -90,6 +90,7 @@ const UploadSolution: NextPage<UploadSolutionProps> = ({ users }) => {
       <div className="container max-w-fit mx-auto p-4 bg-white shadow-md rounded-md text-2xl">
         <form
           onSubmit={(event) => {
+            console.log("submitting", event);
             setSubmittingMessage("Submitting...");
             handleSubmit(event);
             router.push("/solutions");
@@ -138,11 +139,13 @@ const UploadSolution: NextPage<UploadSolutionProps> = ({ users }) => {
               onChange={handleUsernameChange}
               id="username"
             >
-              {users.map((user) => (
-                <option key={user} value={user}>
-                  {user}
-                </option>
-              ))}
+              {users
+                .sort((a, b) => a.localeCompare(b))
+                .map((user) => (
+                  <option key={user} value={user}>
+                    {user}
+                  </option>
+                ))}
             </select>
             <label htmlFor="language" className="italic">
               Language
