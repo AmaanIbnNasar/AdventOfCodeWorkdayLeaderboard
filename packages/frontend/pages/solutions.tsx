@@ -46,7 +46,10 @@ const SolutionModal: React.FC<{ day: any; solution: any }> = ({
           >
             Close
           </button>
-          <p className="font-bold">{solution.author}</p>
+          <div className="flex space-x-20">
+            <p className="font-bold">{solution.author}</p>
+            <p className="font-bold italic">{solution.language}</p>
+          </div>
           <SyntaxHighlighter
             key={key}
             language={solution.language}
