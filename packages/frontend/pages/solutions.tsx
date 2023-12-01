@@ -1,8 +1,10 @@
 import BasePage from "@/presentation/wrappers/BasePage";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { NextPage } from "next";
 import React from "react";
 import Modal from "react-modal";
 import SyntaxHighlighter from "react-syntax-highlighter";
+import { LANGUAGE_ICONS_BY_NAME } from "./upload_solution";
 
 const SolutionModal: React.FC<{ day: any; solution: any }> = ({
   day,
@@ -48,7 +50,12 @@ const SolutionModal: React.FC<{ day: any; solution: any }> = ({
           </button>
           <div className="flex space-x-20">
             <p className="font-bold">{solution.author}</p>
-            <p className="font-bold italic">{solution.language}</p>
+            <div className="flex space-x-5 items-center">
+              <p className="font-bold italic">{solution.language}</p>
+              <FontAwesomeIcon
+                icon={LANGUAGE_ICONS_BY_NAME[solution.language]}
+              />
+            </div>
           </div>
           <SyntaxHighlighter
             key={key}

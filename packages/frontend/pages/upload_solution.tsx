@@ -4,37 +4,77 @@ import { GetServerSideProps, NextPage } from "next";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { API_URL } from ".";
-
+import {
+  IconDefinition,
+  faTerminal,
+  faC,
+} from "@fortawesome/free-solid-svg-icons";
+import {
+  faGolang,
+  faJava,
+  faJs,
+  faPhp,
+  faPython,
+  faRProject,
+  faRust,
+  faSwift,
+} from "@fortawesome/free-brands-svg-icons";
 interface UploadSolutionProps {
   users: string[];
 }
 
+export const LANGUAGES = [
+  "bash",
+  "c",
+  "csharp",
+  "fortran",
+  "go",
+  "haskell",
+  "java",
+  "javascript",
+  "kotlin",
+  "lisp",
+  "lua",
+  "matlab",
+  "objectivec",
+  "perl",
+  "php",
+  "powershell",
+  "python",
+  "r",
+  "ruby",
+  "rust",
+  "scala",
+  "swift",
+  "typescript",
+];
+
+export const LANGUAGE_ICONS_BY_NAME: Record<string, any> = {
+  bash: faTerminal,
+  c: faC,
+  csharp: faC,
+  fortran: faTerminal,
+  go: faGolang,
+  haskell: faTerminal,
+  java: faJava,
+  javascript: faJs,
+  kotlin: faTerminal,
+  lisp: faTerminal,
+  lua: faTerminal,
+  matlab: faTerminal,
+  objectivec: faC,
+  perl: faTerminal,
+  php: faPhp,
+  powershell: faTerminal,
+  python: faPython,
+  r: faRProject,
+  ruby: faTerminal,
+  rust: faRust,
+  scala: faTerminal,
+  swift: faSwift,
+  typescript: faJs,
+};
 const UploadSolution: NextPage<UploadSolutionProps> = ({ users }) => {
-  const LANGUAGES = [
-    "bash",
-    "c",
-    "csharp",
-    "fortran",
-    "go",
-    "haskell",
-    "java",
-    "javascript",
-    "kotlin",
-    "lisp",
-    "lua",
-    "matlab",
-    "objectivec",
-    "perl",
-    "php",
-    "powershell",
-    "python",
-    "r",
-    "ruby",
-    "rust",
-    "scala",
-    "swift",
-    "typescript",
-  ];
   const [day, setDay] = useState("1");
   const [task, setTask] = useState("1");
   const [username, setUsername] = useState(users[0]);
