@@ -23,7 +23,7 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ users }) => {
                     : "white",
                 }}
               >
-                <p>
+                <p style={{ width: "39px" }}>
                   {["Fri", "Sat", "Sun", "Mon", "Tue", "Wed", "Thu"][index % 7]}
                 </p>
                 <a
