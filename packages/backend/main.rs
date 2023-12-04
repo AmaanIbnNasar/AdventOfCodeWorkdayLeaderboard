@@ -108,23 +108,24 @@ fn calculate_points(day_statuses: &[DayStatus], year: i32) -> usize {
     day_statuses
         .iter()
         .enumerate()
-        .filter(|(day_index, _)| filter_weekend(day_index + 1, year))
-        .fold(0, |acc, (_, day_status)| {
-            let task_1_points = get_task_points(day_status.task_1);
-            let task_2_points = get_task_points(day_status.task_2);
+        .map(|(day_index, day_status)| (day_index, day_status, is_weekend(day_index + 1, year)))
+        .fold(0, |acc, (_, day_status, is_weekend)| {
+            let task_1_points = get_task_points(day_status.task_1, is_weekend);
+            let task_2_points = get_task_points(day_status.task_2, is_weekend);
             acc + task_1_points + task_2_points
         })
 }
 
-fn get_task_points(task_status: TaskStatus) -> usize {
-    match task_status {
-        TaskStatus::OnTime => 2,
-        TaskStatus::Late => 1,
-        TaskStatus::Incomplete => 0,
+fn get_task_points(task_status: TaskStatus, is_weekend: bool) -> usize {
+    match (is_weekend, task_status) {
+        (true, TaskStatus::OnTime) | (true, TaskStatus::Late) => 2,
+        (false, TaskStatus::OnTime) => 2,
+        (false, TaskStatus::Late) => 1,
+        (_, TaskStatus::Incomplete) => 0,
     }
 }
 
-fn filter_weekend(day: usize, year: i32) -> bool {
+fn is_weekend(day: usize, year: i32) -> bool {
     // This function filters out the weekends assuming all days are in december
     let date = Utc.with_ymd_and_hms(year, 12, day as u32, 0, 0, 0).unwrap();
     let weekday = date.weekday();
