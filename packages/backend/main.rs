@@ -118,8 +118,7 @@ fn calculate_points(day_statuses: &[DayStatus], year: i32) -> usize {
 
 fn get_task_points(task_status: TaskStatus, is_weekend: bool) -> usize {
     match (is_weekend, task_status) {
-        (true, TaskStatus::OnTime) | (true, TaskStatus::Late) => 2,
-        (false, TaskStatus::OnTime) => 2,
+        (_, TaskStatus::OnTime) | (true, TaskStatus::Late) => 2,
         (false, TaskStatus::Late) => 1,
         (_, TaskStatus::Incomplete) => 0,
     }
@@ -129,7 +128,7 @@ fn is_weekend(day: usize, year: i32) -> bool {
     // This function filters out the weekends assuming all days are in december
     let date = Utc.with_ymd_and_hms(year, 12, day as u32, 0, 0, 0).unwrap();
     let weekday = date.weekday();
-    weekday != chrono::Weekday::Sat && weekday != chrono::Weekday::Sun
+    weekday == chrono::Weekday::Sat || weekday == chrono::Weekday::Sun
 }
 
 struct CacheResponse {
