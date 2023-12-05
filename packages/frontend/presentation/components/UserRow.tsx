@@ -20,6 +20,7 @@ export type User = {
 
 type UserRowProps = {
   user: User;
+  position: string;
 };
 
 export const ON_TIME_STAR_COLOUR = "orange";
@@ -84,7 +85,7 @@ const createStar = (task_1: TaskStatus, task_2: TaskStatus) => {
   }
 };
 
-const UserRow: React.FC<UserRowProps> = ({ user }) => {
+const UserRow: React.FC<UserRowProps> = ({ user, position }) => {
   const nameIsTruncated = user.name.length > 13;
   const truncatedName = nameIsTruncated
     ? user.name.substring(0, 13) + "..."
@@ -94,6 +95,7 @@ const UserRow: React.FC<UserRowProps> = ({ user }) => {
     <>
       {nameIsTruncated && <Tooltip id={username} />}
       <tr>
+        <td className="font-bold">{position}</td>
         <td
           data-tooltip-id={username}
           data-tooltip-content={username}
