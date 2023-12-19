@@ -1,4 +1,8 @@
-import { faStar, faStarHalfAlt } from "@fortawesome/free-solid-svg-icons";
+import {
+  faStar,
+  faStarHalf,
+  faStarHalfAlt,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Tooltip } from "react-tooltip";
 import "react-tooltip/dist/react-tooltip.css";
@@ -39,18 +43,28 @@ const createStar = (task_1: TaskStatus, task_2: TaskStatus) => {
       />
     );
   }
-  if (
-    (task_1 == "Late" && task_2 == "Late") ||
-    (task_1 == "OnTime" && task_2 == "Late") ||
-    (task_1 == "Late" && task_2 == "OnTime")
-  ) {
+  if (task_1 == "Late" && task_2 == "Late") {
     return (
-      <FontAwesomeIcon
-        icon={faStar}
-        style={{
-          color: LATE_STAR_COLOUR,
-        }}
-      />
+      <FontAwesomeIcon icon={faStar} style={{ color: LATE_STAR_COLOUR }} />
+    );
+  }
+  if (task_1 == "OnTime" && task_2 == "Late") {
+    return (
+      <span className="fa-layers fa-fw">
+        <FontAwesomeIcon
+          icon={faStarHalf}
+          style={{
+            color: LATE_STAR_COLOUR,
+          }}
+          flip="horizontal"
+        />
+        <FontAwesomeIcon
+          icon={faStarHalf}
+          style={{
+            color: ON_TIME_STAR_COLOUR,
+          }}
+        />
+      </span>
     );
   }
   if (task_1 == "OnTime" && task_2 == "Incomplete") {
