@@ -3,7 +3,7 @@ An Advent of Code leaderboard with a scoring system more appropriate for the wor
 
 ## Scoring
 
-- Weekends are ignored
+- Weekends are scored as on time regardless of completion time
 - A task completed on the day it is set is worth 2 points
 - A task completed after the day it is set is worth 1 point
 
