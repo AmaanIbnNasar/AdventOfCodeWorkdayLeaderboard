@@ -80,7 +80,7 @@ export const getServerSideProps: GetServerSideProps<
       headers: new Headers([
         // ["x-test", "true"],
         ["x-leaderboard", "1599442"],
-        ["x-year", "2023"],
+        ["x-year", "2024"],
       ]),
     }
   );
