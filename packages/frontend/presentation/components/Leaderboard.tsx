@@ -5,7 +5,7 @@ export interface LeaderboardProps {
   users: User[];
 }
 
-export const WEEKENDS = [2, 3, 9, 10, 16, 17, 23, 24, 30, 31];
+export const WEEKENDS = [1, 7, 8, 14, 15, 21, 22, 28, 29];
 
 const getPosition = (currentIndex: number, sortedUsers: User[]) => {
   const currentPoints = sortedUsers[currentIndex].points;
@@ -46,11 +46,11 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ users }) => {
                 }}
               >
                 <p style={{ width: "39px" }}>
-                  {["Fri", "Sat", "Sun", "Mon", "Tue", "Wed", "Thu"][index % 7]}
+                  {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][index % 7]}
                 </p>
                 <a
                   className="text-center"
-                  href={`https://adventofcode.com/2023/day/${index + 1}`}
+                  href={`https://adventofcode.com/2024/day/${index + 1}`}
                 >{`${index + 1}`}</a>
               </div>
             </th>
